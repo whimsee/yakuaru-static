@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Yakuaru Printable Version</title>
+        <meta charset="utf-8" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/root/apple-touch-icon.png">
+		<link rel="icon" type="image/x-icon" href="/root/favicon.ico">
+		<link rel="icon" type="image/png" sizes="32x32" href="/root/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/root/favicon-16x16.png">
+		<link rel="manifest" href="/root/site.webmanifest">
+		<link rel="canonical" href="https://yakuaru.com" />
+
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <link rel="stylesheet" href="/css/print.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP|Noto+Serif+JP">
+    </head>
+    <body>
+        <div id="header">Yakuaru Printable Version</div>
+        <hr id="header">
+        {% for term in terms %}
+            <div class="term">
+                <div class="headerdiv">
+                    {% if term.kanaOverride %}
+                        <div class="name">{{ term.term }} [{{ term.kanaOverride }}]</div>
+                    {% else %}
+                        {% if term.furigana %}
+                            <div class="name">{{ term.term }} [{{ term.furigana }}]</div>
+                        {% else %}
+                            <div class="name">{{ term.term }}</div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="romajiName">H: {{ term.hepburn|e }} | 
+                        {% if term.nihon == term.kunrei %}
+                            N/K: {{ term.nihon|e }}
+                        {% else %}
+                            N: {{ term.nihon|e }} | K: {{ term.kunrei|e }}
+                        {% endif %}
+                    </div>
+                    {% if term.lit %}
+                        <div class="literal"><em>Lit./Com. {{ term.lit }}</em></div>
+                    {% endif %}
+                </div>
+                <div class="def-wrapper">
+                    {% for x in term['tl'] %}
+                        {% if loop.last %}
+                        <div class="def-content last">
+                        {% else %}
+                        <div class="def-content">
+                        {% endif %}
+                            <div class="def">{{loop.index ~ ". " ~ x.def|e }}</div>
+                            {% if x['defexp'] %}
+                                {% if not x['jpsam'] and not x['ensam'] %}
+                                    <div class="defexp onlyexp">{{ x.defexp|e }}</div>
+                                {% else %}
+                                    <div class="defexp">{{ x.defexp|e }}</div>
+                                {% endif %}
+                            {% endif %}
+                            {% if x['jpsam'] %}
+                                <div class="jpsam">{{ x.jpsam|e }}</div>
+                            {% endif %}
+                            {% if x['ensam'] %}
+                                <div class="ensam">{{ x.ensam|e }}</div>
+                            {% endif %}
+                            {% if x['src'] %}
+                                {% for y in x['src'] %}
+                                    {% if 'http' in y %}
+                                        <div class="def-source"><a href="{{ y|e }}" target="_blank"><em>{{ y|e }}</em></a></div>
+                                    {% else %}
+                                        <div class="def-source"><em>{{ y|e }}</em></div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% if x['credit'] %}
+                            <div class="credit"><em>Contributed by: {{ x.credit|e }}</em></div>
+                        {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </body>
+</html>

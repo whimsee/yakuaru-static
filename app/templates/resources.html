@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<!--
+	Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Yakuaru -- Resources</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="Glossary of Japanese to English Terms and Definitions for Media Translators" />
+		<meta name"keywords" content="Translation,Localization,Japanese,Glossary,Games,Manga,Anime,Light Novels,Glossary" />
+
+		<link rel="apple-touch-icon" sizes="180x180" href="root/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="root/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="root/favicon-16x16.png">
+		<link rel="manifest" href="root/site.webmanifest">
+		<link rel="canonical" href="https://yakuaru.com/resources" />
+
+		<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP|Noto+Serif+JP">
+		<noscript><link rel="stylesheet" href="css/noscript.css" /></noscript>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GJ1HWB5VBW"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'G-GJ1HWB5VBW');
+		</script>
+
+
+
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="generic">
+						<h1><a href="/">YAKUARU</a></h1>
+					</header>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li><a href="/about">About</a></li>
+								<li><a target="_blank" href="https://forms.gle/dRkeUWtqkKa2B6Kh8">Submit a Term or Definition</a></li>
+								<li><a href="/resources">Resources</a></li>
+								<li><a target="_blank" href="https://subs.yakuaru.com">SubArchivist</a></li>
+							</ul>
+						</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Content -->
+							<section id="content" class="resources">
+								<div>
+									<p style="text-align: center">Feel free to contact me on twitter <a target="_blank" href="https://twitter.com/jbtenmatay">@jbtenmatay</a> if you want to include a tool or resource.</p>
+									{# Refers to resources.json #}
+									{% for key, value in resources.items() %}
+										<h3>{{ key|e }}</h3>
+										{% for i, t in value.items() %}
+											<p><a href={{ t|e }}>{{ i|e }}</a></p>
+										{% endfor %}
+									{% endfor %}
+								</div>
+							</section>
+
+					</div>
+
+					<!-- Footer -->
+						<footer id="footer">
+							<p class="copyright">&copy; Yakuaru. Based on <a href="https://glossary.infil.net/">Infil's FG Glossary</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						</footer>
+
+			</div>
+	</body>
+</html>

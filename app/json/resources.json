@@ -1,0 +1,106 @@
+
+{
+    "Dictionaries" : {
+        "Weblio Japanese to Japanese Dictionary" : "https://www.weblio.jp/",
+        "Weblio Japanese to English Dictionary" : "https://ejje.weblio.jp/",
+        "Weblio Japanese to Japanese Thesaurus" : "https://thesaurus.weblio.jp/",
+        "https://gogen-yurai.jp/ - Etymological J-J dictionary. Detailed explanations and synonyms for words and slang." : "https://gogen-yurai.jp/",
+        "https://meaning.jp/ - Etymological J-J resource. Helpful for [word]とは searches." : "https://meaning.jp/",
+        "https://kotobank.jp/" : "https://kotobank.jp/",
+        "goo.ne.jp Japanese to Japanese Dictionary" : "https://dictionary.goo.ne.jp/",
+        "goo.ne.jp English to Japanese Dictionary" : "https://dictionary.goo.ne.jp/en/",
+        "eow.alc.co.jp" : "eow.alc.co.jp",
+        "jisho.org" : "jisho.org",
+        "https://www.dictjuggler.net/yakugo/" : "https://www.dictjuggler.net/yakugo/",
+        "http://nihongo.monash.edu/cgi-bin/wwwjdic" : "http://nihongo.monash.edu/cgi-bin/wwwjdic",
+        "https://www.kenkyusha.co.jp/modules/08_luminous/index.php" : "https://www.kenkyusha.co.jp/modules/08_luminous/index.php",
+        "ichi.moe - Breaks down sentences into their constituent words, which are provided definitions courtesy of JMDict." : "https://ichi.moe/",
+        "Immersion Kit - Easily search Japanese vocab and grammar across anime, drama, games, news, and literature." : "https://www.immersionkit.com/dictionary"
+    },
+    "Tools and offline dictionaries" : {
+        "Yomitan" : "https://github.com/themoeway/yomitan",
+        "Yomitan Dictionaries" : "https://github.com/themoeway/yomitan/blob/master/docs/dictionaries.md#dictionaries",
+        "http://qolibri.osdn.jp/ - browse and search EPWING format dictionaries (can be found online)" : "http://qolibri.osdn.jp/",
+        "http://jedict.com/ - iOS app" : "http://jedict.com/",
+        "https://www.tagaini.net/ - Offline J-E dictionary with other features that don't usually come with such programs" : "https://www.tagaini.net/",
+        "https://takoboto.jp/ - Available both online and offline" : "https://takoboto.jp/",
+        "https://kanji.sljfaq.org/ - Supports a variety of ways to lookup kanji—handwritten, radical, SKIP, etc." : "https://kanji.sljfaq.org/",
+        "https://kanjitomo.net/ - Kanji OCR Tool" : "https://kanjitomo.net/",
+        "fugashi - Japanese tokenizer and morphological analysis tool" : "https://github.com/polm/fugashi"
+    },
+    "Japanese Sound Effects (SFX)" : {
+        "http://thejadednetwork.com/sfx/" : "http://thejadednetwork.com/sfx/",
+        "Japanese SFX Google sheet" : "http://thejadednetwork.com/sfx/",
+        "Hentai and Non-Hentai Sound Effects and What They Mean (PDF)" : "http://thejadednetwork.com/sfx/",
+        "https://www.japanpowered.com/anime-articles/manga-sound-effect-guide" : "http://thejadednetwork.com/sfx/",
+        "http://mangastudies.com/sfx/index.php" : "http://mangastudies.com/sfx/index.php"
+    },
+    "Name kanji reading and katakana names" : {
+        "https://www.kanshudo.com/searchn - E-J name kanji lookup" : "https://www.kanshudo.com/searchn",
+        "https://kanji.reader.bz/" : "https://kanji.reader.bz/",
+        "http://name.m3q.jp/" : "http://name.m3q.jp/",
+        "https://yomikatawa.com/" : "https://yomikatawa.com/",
+        "https://www.weblio.jp/cat/dictionary/gkjyj - looks up possible spellings for katakana names (J-E and E-J)" : "https://www.weblio.jp/cat/dictionary/gkjyj"
+    },
+    "English writing tools" : {
+        "WordWeb - Offline dictionary and thesaurus" : "https://wordweb.info/free/",
+        "E-J Fighting Game Glossary" : "https://glossary.infil.net/",
+        "https://capitalizemytitle.com/" : "https://capitalizemytitle.com/",
+        "https://titlecaseconverter.com/" : "https://titlecaseconverter.com/",
+        "The Chicago Manual of Style Online: Hyphenation Table" : "https://titlecaseconverter.com/",
+        "The Art of Writing Effective Queries" : "http://www.councilscienceeditors.org/wp-content/uploads/v36n3p78.pdf",
+        "OneLook thesaurus" : "https://www.onelook.com/reverse-dictionary.shtml",
+        "Green’s Dictionary of Slang - Comprehensive dictionary of English slang that includes sources and quotes, with tons of search options. A good way to check how if such-and-such slang is still being used and how." : "https://greensdictofslang.com/",
+        "https://www.freecollocation.com/" : "https://www.freecollocation.com/",
+        "https://www.rhymezone.com/ - Not just a zone for rhymes." : "https://www.rhymezone.com/",
+        "https://www.english-corpora.org/coca/ - Corpus of American English that searches through all sorts of text. Constantly updated but requires a free (but limited) account to use." : "https://www.english-corpora.org/coca/",
+        "Merriam-Webster Dictionary and Thesaurus" : "https://www.merriam-webster.com/",
+        "https://writingcenter.gmu.edu/guides" : "https://writingcenter.gmu.edu/guides",
+        "Netflix English Timed Text Style Guide" : "https://partnerhelp.netflixstudios.com/hc/en-us/articles/217350977-English-Timed-Text-Style-Guide"
+    },
+    "Regular Expressions (Regex)" : {
+        "Regular Expressions: an Introduction for Translators" : "https://www.atanet.org/resources/regular-expressions-an-introduction-for-translators/",
+        "Regex tester" : "https://www.regextester.com/translation/",
+        "Regex cheatsheet" : "https://www.keycdn.com/support/regex-cheatsheet"
+    },
+    "English resources for reading" : {
+        "List of Generic and Genericized Trademarks" : "https://en.wikipedia.org/wiki/List_of_generic_and_genericized_trademarks",
+        "Appropriate Terms to Use About Disability" : "https://en.wikipedia.org/wiki/List_of_generic_and_genericized_trademarks",
+        "A Fair Point Ensuring Gender Neutrality in Translation" : "https://www.vengaglobal.com/blog/a-fair-point-ensuring-gender-neutrality-in-translation/",
+        "Edging Toward Japan: Just how gender neutral is Japanese?" : "https://www.vengaglobal.com/blog/a-fair-point-ensuring-gender-neutrality-in-translation/",
+        "Queering Translation, Translating the Queer: Theory, Practice, Activism" : "https://www.taylorfrancis.com/books/oa-edit/10.4324/9781315505978/queering-translation-translating-queer-brian-james-baer-klaus-kaindl",
+        "Translation by Example: Principles for Minimizing Errors" : "https://www.taylorfrancis.com/books/oa-edit/10.4324/9781315505978/queering-translation-translating-queer-brian-james-baer-klaus-kaindl",
+        "J-En Translations - Interviews, podcasts, info about translation competitions, and other informative posts" : "https://www.taylorfrancis.com/books/oa-edit/10.4324/9781315505978/queering-translation-translating-queer-brian-james-baer-klaus-kaindl",
+        "Are your Japanese translations sounding robotic? Opt for the human touch." : "https://www.japantimes.co.jp/life/2022/03/25/language/japanese-translations-sounding-robotic-opt-human-touch/",
+        "Takashi's Japanese Dictionary - Good source to learn about the quirkier aspects of JP, complete with sentences. Also features some nifty tools." : "https://takashionary.com/",
+        "https://legendsoflocalization.com/" : "https://takashionary.com/",
+        "Literary Translators Comment on Localization & Re-Translation" : "https://legendsoflocalization.com/literary-translators-comment-on-localization-re-translation/",
+        "Monthly Slang Reviews" : "https://legendsoflocalization.com/literary-translators-comment-on-localization-re-translation/",
+        "Can a Translation Be Better Than the Original Book" : "https://bookriot.com/can-a-translation-be-better-than-the-original-book/",
+        "Capcom’s quest to translate The Great Ace Attorney for Western audiences" : "https://www.polygon.com/interviews/22519215/great-ace-attorney-chronicles-interview-translator-localization-japanese-western-audience",
+        "What the different カッコ (quotation marks) in Japanese are and how they're used" : "https://twitter.com/JapanTalkOnline/status/1485881909599436802",
+        "(Quora) How do you spell out sexual moans" : "https://www.quora.com/How-do-you-spell-out-sexual-moans",
+        "List of Japanese Abbreviated Words and Phrases" : "https://takashionary.com/unique-abbreviations-in-japanese/",
+        "The possibilities of research on fujoshi in Japan" : "https://takashionary.com/unique-abbreviations-in-japanese/"
+    },
+    "Game Localization" : {
+        "Project Management in Game Development" : "https://www.massive.se/blog/games-technology/project-management-in-game-development/",
+        "Best Practices for Game Localization" : "https://igda.org/resources-archive/best-practices-for-game-localization/",
+        "Game localisation: unleashing imagination with 'restricted' translation" : "https://www.semanticscholar.org/paper/Game-localisation%3A-unleashing-imagination-with-Mangir%C3%B3n-O%E2%80%99Hagan/ba7bad3215ad01f00f4bb6a73f8e1d240975c620",
+        "Redundant Translations in Games & Anime" : "https://legendsoflocalization.com/redundant-translations-in-games-anime/",
+        "XSEED Games blog" : "https://legendsoflocalization.com/redundant-translations-in-games-anime/"
+    },
+    "Videos talking about Translation" : {
+        "Tackling Translation: Media Localization Across Mediums (EN/日本語)" : "https://www.youtube.com/watch?v=DakLp0igTRg",
+        "Thinking Outside the Panel: Critical Thinking for Simulpub Manga Translation" : "https://www.youtube.com/watch?v=NqTGiYnqD8c"
+    },
+    "Manga lettering" : {
+        "http://sara.pizza/resources" : "http://sara.pizza/resources"
+    },
+    "Other resource lists" : {
+        "J-E Resource Sheet by @usagiko" : "https://docs.google.com/document/d/16BLgb2SuPtAjl3lOSiFzMKyu-6YQKrm242GEhGk7xQQ/edit",
+        "Living Japanese Slang Dictionary by Wes Robertson" : "https://wesleycrobertson.wordpress.com/2022/06/19/living-japanese-slang-dictionary/",
+        "Japanese Online FPS Game Terms Flashcard Set (Starter Pack) by Tomoyo" : "https://ko-fi.com/s/681dda4b5d",
+        "(JP-JP) List of gamedev-specific terms" : "https://game-creators.jp/media/game-word/"
+    }
+}

@@ -1,0 +1,107 @@
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400';
+
+html, body, div, span, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby,
+section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+
+#header {
+    font-family: "Noto Serif JP";
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+hr #header {
+    border-top: 10px dotted black;
+}
+
+.term {
+    font-family: "Noto Serif JP";
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px dashed black;
+}
+
+.term .name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.term .romajiName {
+    font-size: 15px;
+    font-style: italic;
+}
+
+.term .literal {
+    font-style: italic;
+}
+
+.def-content {
+    margin-left: 1em;
+    font-size: 1em;
+    font-family: "Noto Sans JP";
+    padding: 10px 0px;
+    border-bottom: 1.5px dotted black;
+}
+
+.def-content .def {
+  font-weight: bold;
+}
+
+.def-content .defexp {
+    text-align: justify;
+    line-height: 1.5;
+    margin-top: 5px;
+    font-size: .8em;
+    padding: 0px 0px 5px 5px;
+    border-bottom: 1.5px dotted black;
+  }
+
+
+.def-content .ensam {
+padding-left: 10px;
+font-size: 1em;
+}
+
+.def-content .jpsam {
+margin-top: 3px;
+padding-left: 10px;
+font-size: 1.0em;
+}
+
+.def-content .def-source {
+padding-left: 10px;
+font-size: .6em;
+}
+
+.def-content .credit {
+font-size: .6em;
+padding-left: 10px;
+}
+
+.def-content.last {
+    border-bottom: none;
+}
+
+.def-content .defexp.onlyexp {
+    border-bottom: none;
+  }
