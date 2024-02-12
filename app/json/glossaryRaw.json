@@ -111,7 +111,7 @@
     "tl": [
       {
         "def": "soda",
-        "defexp": "\"This word does NOT strictly refer to fruit juice; in colloquial speech it actually means 'soda'<br />Yes, that means you could call any kind of carbonated drink ジュース, regardless of how much (if any) fruit juice it contains\"",
+        "defexp": "\"This word does NOT strictly refer to fruit juice; in colloquial speech it actually means 'soda'<br>Yes, that means you could call any kind of carbonated drink ジュース, regardless of how much (if any) fruit juice it contains\"",
         "src": [
           "https://twitter.com/MKHloc/status/1502243830124498944"
         ]
@@ -142,7 +142,7 @@
     "tl": [
       {
         "def": "lore; setting",
-        "defexp": "\"This word has 2 additional meanings in the context of fiction and stories: 'lore' and 'setting'.<br />You could say that Dark Souls has rich 世界観, or that Arknights has a bleak 世界観\"",
+        "defexp": "\"This word has 2 additional meanings in the context of fiction and stories: 'lore' and 'setting'.<br>You could say that Dark Souls has rich 世界観, or that Arknights has a bleak 世界観\"",
         "src": [
           "https://twitter.com/MKHloc/status/1502243830124498944"
         ]
@@ -167,7 +167,7 @@
     "tl": [
       {
         "def": "dungeon",
-        "defexp": "\"This word comes up A LOT in a project I worked on recently, and it's not until after I was done translating it that I realized how horribly I'd messed up<br />You see, this word is often used to refer to what we'd call 'dungeons,' like you'd see in the Zelda series\"",
+        "defexp": "\"This word comes up A LOT in a project I worked on recently, and it's not until after I was done translating it that I realized how horribly I'd messed up<br>You see, this word is often used to refer to what we'd call 'dungeons,' like you'd see in the Zelda series\"",
         "src": [
           "https://twitter.com/MKHloc/status/1502243830124498944"
         ]
@@ -181,7 +181,7 @@
     "tl": [
       {
         "def": "term of endearment",
-        "defexp": "\"Whenever I see an inappropriate direct translation of this word, it's like hearing nails on a chalkboard.<br />It's VERY OFTEN used as an endearing term for something the speaker adores, such as a pet or a favorite vehicle or weapon.\"",
+        "defexp": "\"Whenever I see an inappropriate direct translation of this word, it's like hearing nails on a chalkboard.<br>It's VERY OFTEN used as an endearing term for something the speaker adores, such as a pet or a favorite vehicle or weapon.\"",
         "src": [
           "https://twitter.com/MKHloc/status/1502243830124498944"
         ]
@@ -194,7 +194,7 @@
     "tl": [
       {
         "def": "contextual net slang",
-        "defexp": "\"This one is admittedly quite specific\nIt's basically internet slang for a bunch of words that start with 突, e.g. 突撃 and 突然.<br />\nIn the context of mobile games it's usually a shorthand for (限界)突破 ('limit break') and maxed-out characters/equipment/skills.\"",
+        "defexp": "\"This one is admittedly quite specific\nIt's basically internet slang for a bunch of words that start with 突, e.g. 突撃 and 突然.<br>\nIn the context of mobile games it's usually a shorthand for (限界)突破 ('limit break') and maxed-out characters/equipment/skills.\"",
         "src": [
           "https://twitter.com/MKHloc/status/1502243830124498944"
         ]
@@ -564,6 +564,30 @@
       {
         "def": "thank you; thank goodness; how delightful; what a joy; I'm flattered",
         "defexp": "Adjectives like these are conveniently expressed in JP, especially in dialogue, but can be tricky to translate. Find out where the \"happiness\" comes from and go from there."
+      },
+      {
+        "def": "rock on",
+        "src": ["The World Ends With You"],
+        "jpsam": "おっ！ 知ってんの？ うれしいねぇ…",
+        "ensam": "Oh, you've heard of us? Rock on."
+      },
+      {
+        "def": "Oh, joy!",
+        "src": ["Dragon Quest I"],
+        "jpsam": "うれしゅうございます。",
+        "ensam": "Thou wilt? Oh, joy! Then let us away, my love! Tee hee!"
+      },
+      {
+        "def": "thank you",
+        "src": ["Final Fantasy Tactics"],
+        "jpsam": "え、ホント！　嬉しいわ。",
+        "ensam": "Then you'll buy one? Truly? Oh, thank you, kind ser!"
+      },
+      {
+        "def": "I will enjoy...; Such pleasure I will take...",
+        "src": ["Final Fantasy IV DS"],
+        "jpsam": "嬉しい・・・、嬉しいぞ・・・　おまえらを葬ることができて・・・。",
+        "ensam": "Such pleasure I will take in delivering you to the gatesss of hell!"
       }
     ]
   },
@@ -1117,6 +1141,17 @@
         ],
         "jpsam": "許さない // いいかセシル、ローザを泣かせたら 　このワシが許さんからな！",
         "ensam": "I'm sick of this. // Make that girl cry and you'll have me to answer to, you hear?"
+      },
+      {
+        "def": "I hate them!",
+        "genre": [
+          "VG"
+        ],
+        "src": [
+          "Final Fantasy VII"
+        ],
+        "jpsam": "ますます許せねえ！",
+        "ensam": "The more I hear, the more I hate 'em!"
       }
     ]
   },
@@ -5160,7 +5195,7 @@
     "tl": [
       {
         "def": "now's my chance; me, me!; I'll handle this; time to show what I got / take the spotlight / be a hero; It's Me time; I've been waiting; finally...; alright; I shall go; let's go; I'm up; I'm going; very well; I got this; movin' out; now then...; yes?; here I go; this one's mine",
-        "defexp": "Stock phrase often used in turn-based games to indicate the start of a character's turn so you'll very quickly run out of words (which is not always a bad thing) unless you vary it.<br />If anything, adjust to the character voice and refer to similar phrases like まかせて since it's their time to shine.",
+        "defexp": "Stock phrase often used in turn-based games to indicate the start of a character's turn so you'll very quickly run out of words (which is not always a bad thing) unless you vary it.<br>If anything, adjust to the character voice and refer to similar phrases like まかせて since it's their time to shine.",
         "genre": [
           "VG"
         ],
@@ -6647,7 +6682,7 @@
     "tl": [
       {
         "def": "a fan's favorite X; a fan of X; crazy for X; pushing for X; superfan; supporter",
-        "defexp": "This term can be translated in many different ways. Derived from oshimen (oshi(push)-MEMBER), which applies to groups, it has since been adopted to solo personalities as well as it refers to who a fan considers their favorite. It is someone they have high hopes for and wishes to succeed in their endeavors. They might express that support in many ways: by attending events, rooting for them every chance they get, sending letters and presents, buying merchandise, growing a fanbase, etc. It doesn’t necessarily mean going crazy for them, but one probably can’t stay calm in front of their oshi either.<br />It can also be used to refer to a fan of someone (ie. an X oshi)",
+        "defexp": "This term can be translated in many different ways. Derived from oshimen (oshi(push)-MEMBER), which applies to groups, it has since been adopted to solo personalities as well as it refers to who a fan considers their favorite. It is someone they have high hopes for and wishes to succeed in their endeavors. They might express that support in many ways: by attending events, rooting for them every chance they get, sending letters and presents, buying merchandise, growing a fanbase, etc. It doesn’t necessarily mean going crazy for them, but one probably can’t stay calm in front of their oshi either.<br>It can also be used to refer to a fan of someone (ie. an X oshi)",
         "genre": [
           "SY",
           "MU",
@@ -6732,7 +6767,7 @@
     "tl": [
       {
         "def": "catchy \"hook\" of the song",
-        "defexp": "Used without context, it usually refers to the chorus. But it’s not always the case. More often than not you’ll also see it referred to any distinct part of a song, and its meaning is narrowed down when used in derivative forms such as atamasabi (頭サビ), oosabi (大サビ), and ochisabi (落ちサビ).<br />It should be noted that sabi has had different meanings across musical genres and generations so this generally applies to modern Japanese pop music. But the key thing to understand about sabi is its subjective aspect—it leaves a significant emotional impression, whether it’s catchy or moving. If some part of a song is memorable, you can probably call it sabi.",
+        "defexp": "Used without context, it usually refers to the chorus. But it’s not always the case. More often than not you’ll also see it referred to any distinct part of a song, and its meaning is narrowed down when used in derivative forms such as atamasabi (頭サビ), oosabi (大サビ), and ochisabi (落ちサビ).<br>It should be noted that sabi has had different meanings across musical genres and generations so this generally applies to modern Japanese pop music. But the key thing to understand about sabi is its subjective aspect—it leaves a significant emotional impression, whether it’s catchy or moving. If some part of a song is memorable, you can probably call it sabi.",
         "genre": [
           "MU"
         ],
@@ -6814,7 +6849,7 @@
     "tl": [
       {
         "def": "song sections; verse",
-        "defexp": "It's best described as the broadest unit of a song. It covers a distinct sections and you’ll often see it used as ichi-ban (1番) and ni-ban (2番) where each ban leads to the next (ie. 1番: Intro – A Melody – B Melody – Sabi (first chorus)).<br />Ban has a broad range, so it can be (and has been) translated into “verse” in certain contexts. Just know that it can mean much more than that as well.",
+        "defexp": "It's best described as the broadest unit of a song. It covers a distinct sections and you’ll often see it used as ichi-ban (1番) and ni-ban (2番) where each ban leads to the next (ie. 1番: Intro – A Melody – B Melody – Sabi (first chorus)).<br>Ban has a broad range, so it can be (and has been) translated into “verse” in certain contexts. Just know that it can mean much more than that as well.",
         "genre": [
           "MU"
         ],
@@ -7541,7 +7576,7 @@
     "tl": [
       {
         "def": "to be drunk on the idea of love itself",
-        "defexp": "\"... like daydreaming about the idyllic, made-for-each-other brand of love like you'd find in a Disney movie<br />This is in contrast to regular 恋する which is to be in love with a particular person\nSeeing them makes you giddy and you wanna talk to them etc.\"",
+        "defexp": "\"... like daydreaming about the idyllic, made-for-each-other brand of love like you'd find in a Disney movie<br>This is in contrast to regular 恋する which is to be in love with a particular person\nSeeing them makes you giddy and you wanna talk to them etc.\"",
         "src": [
           "https://twitter.com/MKHloc/status/1510934430608760832"
         ]
@@ -9209,7 +9244,7 @@
     "tl": [
       {
         "def": "\"Famous last words\"; \"foreshadowing\"; \"jinx\"; a line or action that dooms a character to a particular fate (ie. death or not being chosen as a romantic candidate)",
-        "defexp": "\"Flag\" comes from the programming term, essentially a true/false variable that determines the outcome of something. It's often seen in light novels that are inspired by RPGs, visual novels, etc. The term can be used as-is, but might not be as immediately recognizable to native English readers since \"flag\" has so many different meanings.<br />The most common example is a line that marks a character for death, like \"after this battle, we'll all have a drink together!\", but it can also be used in a romantic context, ie \"being the childhood friend just means you're doomed to lose.\"",
+        "defexp": "\"Flag\" comes from the programming term, essentially a true/false variable that determines the outcome of something. It's often seen in light novels that are inspired by RPGs, visual novels, etc. The term can be used as-is, but might not be as immediately recognizable to native English readers since \"flag\" has so many different meanings.<br>The most common example is a line that marks a character for death, like \"after this battle, we'll all have a drink together!\", but it can also be used in a romantic context, ie \"being the childhood friend just means you're doomed to lose.\"",
         "genre": [
           "LN",
           "VG"
@@ -10005,5 +10040,42 @@
         "ensam": "If you do as Runa says, you can hit the cap this month."
       }
     ]
+  },
+  {
+      "term": "やれやれ",
+      "romakana": "やれやれ",
+      "lit": "good grief",
+      "tl": [
+          {
+              "def": "Oh brother...",
+              "src": ["Final Fantasy VII"],
+              "jpsam": "やれやれ……",
+              "ensam": "Oh brother..."
+          },
+          {
+              "def": "I don't believe it!",
+              "src": ["Kingdom Hearts"],
+              "jpsam": "やれやれ！",
+              "ensam": "I just don't believe it."
+          },
+          {
+              "def": "Oh boy",
+              "src": ["Suikoden"],
+              "jpsam": "やれやれ　先がおもいやられるね。",
+              "ensam": "Oh boy, this is going to be some trip."
+          },
+          {
+              "def": "Sigh...",
+              "src": ["The World Ends With You"],
+              "jpsam": "やれやれ…",
+              "ensam": "Sigh..."
+          },
+          {
+              "def": "It drives me mad",
+              "src": ["Monster Hunter Rise"],
+              "jpsam": "やれやれ。 もどかしいったらないね。",
+              "ensam": "It drives me mad, and yet, I can't do anything thing about it... "
+          }
+      ]
   }
 ]

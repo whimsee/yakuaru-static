@@ -68,5 +68,5 @@ with open("glossaryRaw.json", "r", encoding="utf8") as file:
 #     print(mas_terms['仕方がない'])
 #     print(len(mas_terms))
     
-with open("test.json", "w", encoding="utf8") as file:
+with open("glossaryMaster.json", "w", encoding="utf8") as file:
     json.dump(mas_terms, file,  ensure_ascii=False, indent="\t", separators=(',', ' : '))
