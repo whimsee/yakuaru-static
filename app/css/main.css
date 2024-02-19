@@ -131,7 +131,7 @@ input, select, textarea {
 	}
 
 	body, input, select, textarea {
-		font-family: "Source Sans Pro", Helvetica, sans-serif;
+		font-family: "Noto Serif JP";
 		font-size: 17pt;
 		font-weight: 300;
 		line-height: 1.65;
@@ -386,7 +386,7 @@ input, select, textarea {
 	}
 
 	.noresults {
-	    font-family: "Newsreader";
+	    font-family: "Noto Serif JP";
 	    color: #1e1e1e;
 	    font-size: 120%;
 	    text-align: center;

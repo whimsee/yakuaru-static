@@ -16,4 +16,4 @@ COPY ./app /code/app
 
 # 
 #ENV FORWARDED_ALLOW_IPS=*
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--reload", "--host", "0.0.0.0", "--port", "80"]
