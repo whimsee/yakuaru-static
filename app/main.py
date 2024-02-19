@@ -135,6 +135,7 @@ app.mount("/media", StaticFiles(directory=str(BASE_PATH /"media")), name="media"
 app.mount("/images", StaticFiles(directory=str(BASE_PATH /"images")), name="images")
 app.mount("/sass", StaticFiles(directory=str(BASE_PATH /"sass")), name="sass")
 app.mount("/webfonts", StaticFiles(directory=str(BASE_PATH /"webfonts")), name="webfonts")
+app.mount("/fonts", StaticFiles(directory=str(BASE_PATH /"fonts")), name="fonts")
 
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
