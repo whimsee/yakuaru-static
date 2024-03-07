@@ -301,3 +301,7 @@ async def get_page(request: Request):
 @app.get("/sitemap.xml", response_class=HTMLResponse)
 async def get_page(request: Request):
     return FileResponse(BASE_PATH /"root/sitemap.xml")
+
+@app.get("/status")
+async def health_check():
+    return {"status" : "OK"}
