@@ -101,7 +101,7 @@ async def term_search(data, search_term:str, letters=False):
     else:
         for term,value in data.items():
 
-            if pattern.match(term):
+            if pattern.match(value['romakana']):
                 # print("MATCH")
                 # print(term)
                 matches.append(value)
