@@ -1,0 +1,19 @@
+*index
+&term
+&romakana
+lit
+&hepburn
+&kunrei
+&nihon
+&hasKatakana
+&altsearch
+&tl
+    def
+    defexp
+    src
+    jpsam
+    ensam
+    credit
+    genre(remove)
+    image
+    
