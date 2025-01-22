@@ -7,13 +7,13 @@ lit
 &nihon
 &hasKatakana
 &altsearch
-&tl
+&tl[]
     def
     defexp
-    src
+    src[]
     jpsam
     ensam
     credit
-    genre(remove)
+    genre[](remove)
     image
     
