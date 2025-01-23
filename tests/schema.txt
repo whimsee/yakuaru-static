@@ -11,9 +11,15 @@ lit
     def
     defexp
     src[]
-    jpsam
-    ensam
+    samples
+        - id
+        - jpsam
+        - ensam
+    jpsam (refer to samples)
+    ensam (refer to samples)
     credit
     genre[](remove)
-    image
+    image 
+        - id
+        - link
     

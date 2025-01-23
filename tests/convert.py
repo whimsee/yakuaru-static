@@ -1,6 +1,5 @@
 import sqlite3
 import json
-import hashlib
 con = sqlite3.connect("tutorial.db")
 cur = con.cursor()
 # # cur.execute("CREATE TABLE movie(title, year, score)")
