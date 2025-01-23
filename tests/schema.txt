@@ -1,7 +1,8 @@
 *index
 &term
-&romakana
+romakana
 lit
+furigana
 &hepburn
 &kunrei
 &nihon

@@ -2,7 +2,10 @@ import sqlite3
 import json
 con = sqlite3.connect("tutorial.db")
 cur = con.cursor()
-# # cur.execute("CREATE TABLE movie(title, year, score)")
+try:
+    cur.execute("CREATE TABLE movie(title, year, score)")
+except sqlite3.OperationalError:
+    print("Operational Error")
 
 index = [2,6,8,1,7,3]
 
