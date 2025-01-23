@@ -1,9 +1,11 @@
 import sqlite3
 import json
+import re
+from bs4 import BeautifulSoup
 
 def get_item(data, items, field):
     try:
-        return data[items][field]
+        return data[items][field].replace("'",r"\'")
     except KeyError as e:
         return None
 
@@ -18,7 +20,6 @@ try:
     hepburn TEXT NOT NULL,
     kunrei TEXT NOT NULL,
     nihon TEXT NOT NULL,
-    hasKatakana TEXT NOT NULL,
     furigana TEXT,
     altsearch TEXT NOT NULL)
     """)
@@ -29,26 +30,33 @@ except sqlite3.OperationalError:
 with open('glossaryMaster.json') as file:
     data = json.load(file)
 
-    for items in data:
-        term = get_item(data, items, "term")
-        romakana = get_item(data, items, "romakana")
-        lit = get_item(data, items, "lit")
-        hepburn = get_item(data, items, "hepburn")
-        kunrei = get_item(data, items, "kunrei")
-        nihon = get_item(data, items, "nihon")
-        hasKatakana = get_item(data, items, "hasKatakana")
-        furigana = get_item(data, items, "furigana")
-        altsearch = get_item(data, items, "altsearch")
+for items in data:
+    term = get_item(data, items, "term")
+    romakana = get_item(data, items, "romakana")
+    lit = get_item(data, items, "lit")
+    hepburn = get_item(data, items, "hepburn")
+    kunrei = get_item(data, items, "kunrei")
+    nihon = get_item(data, items, "nihon")
+    furigana = get_item(data, items, "furigana")
+    altsearch = get_item(data, items, "altsearch")
 
+    print(term)
+    print(romakana)
+    print(lit)
+    print(hepburn)
+    print(kunrei)
+    print(nihon)
+    print(altsearch)
+    
     # try:
-    cur.execute('''
-    INSERT INTO entry(term, romakana, lit, hepburn, kunrei, nihon, hasKatakana, furigana, altsearch) VALUES({},{},{},{},{},{},{},{},{})
-    '''.format(term, romakana, lit, hepburn, kunrei, nihon, hasKatakana, furigana, altsearch)
+    cur.execute("""
+        INSERT INTO entry(term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch) VALUES({},{},{},{},{},{},{},{})
+        """.format(term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch)
     )
-    conn.commit()
+    con.commit()
     # except Exception as e:
     #     print(e)
-    
+    break
 
 res = cur.execute("SELECT * FROM entry")
 print(res.fetchall())

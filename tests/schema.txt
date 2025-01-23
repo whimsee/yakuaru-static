@@ -6,7 +6,6 @@ furigana
 &hepburn
 &kunrei
 &nihon
-&hasKatakana
 &altsearch
 &tl[]
     def
