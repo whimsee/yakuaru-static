@@ -1,11 +1,10 @@
 import sqlite3
 import json
 import re
-from bs4 import BeautifulSoup
 
 def get_item(data, items, field):
     try:
-        return data[items][field].replace("'",r"\'")
+        return data[items][field]
     except KeyError as e:
         return None
 
@@ -40,23 +39,14 @@ for items in data:
     furigana = get_item(data, items, "furigana")
     altsearch = get_item(data, items, "altsearch")
 
-    print(term)
-    print(romakana)
-    print(lit)
-    print(hepburn)
-    print(kunrei)
-    print(nihon)
-    print(altsearch)
-    
     # try:
     cur.execute("""
-        INSERT INTO entry(term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch) VALUES({},{},{},{},{},{},{},{})
-        """.format(term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch)
-    )
+        INSERT INTO entry("term", "romakana", "lit", "hepburn", "kunrei", "nihon", "furigana", "altsearch") VALUES
+        (?,?,?,?,?,?,?,?)
+        """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
     con.commit()
     # except Exception as e:
     #     print(e)
-    break
 
 res = cur.execute("SELECT * FROM entry")
 print(res.fetchall())
