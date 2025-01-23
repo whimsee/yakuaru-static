@@ -18,8 +18,8 @@ keys_split = keys_raw.split(",")
 for num in keys_split:
     print(index[int(num)])
     item = int(index[int(num)])
-    print("SELECT {} FROM {} WHERE id = {}".format("value", "val", item))
-    res = cur.execute("SELECT {} FROM {} WHERE id = {}".format("value", "vals", item))
+    print("SELECT ? FROM ? WHERE id = ?", ("value", "val", item))
+    res = cur.execute("SELECT ? FROM ? WHERE id = ?", ("value", "vals", item))
     value = cur.fetchone()[0]
     print(value)
 
