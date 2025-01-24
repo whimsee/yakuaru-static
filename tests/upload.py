@@ -13,7 +13,7 @@ with sqlite3.connect("tutorial.db") as con:
     cur = con.cursor()
     try:
         cur.execute("""
-        CREATE TABLE entries(
+        CREATE TABLE "entries" (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         term TEXT NOT NULL, romakana TEXT NOT NULL,
         lit TEXT,
@@ -42,16 +42,19 @@ with sqlite3.connect("tutorial.db") as con:
         altsearch = get_item(data, items, "altsearch")
 
         res = cur.execute("SELECT term FROM entries WHERE term = ?", [term])
-        if res.fetchone()
+        if res.fetchone() == None:
+            try:
+                cur.execute("""
+                    INSERT INTO "entries" ("term", "romakana", "lit", "hepburn", "kunrei", "nihon", "furigana", "altsearch") VALUES
+                    (?,?,?,?,?,?,?,?)
+                    """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
+                con.commit()
+            except Exception as e:
+                print(e)
 
-        # try:
-        cur.execute("""
-            INSERT INTO entries("term", "romakana", "lit", "hepburn", "kunrei", "nihon", "furigana", "altsearch") VALUES
-            (?,?,?,?,?,?,?,?)
-            """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
-        con.commit()
-        # except Exception as e:
-        #     print(e)
+        ## just do one
+        print(cur.lastrowid)
+        break
 
-    res = cur.execute("SELECT * FROM entry")
+    res = cur.execute("SELECT * FROM entries")
     print(res.fetchall())
