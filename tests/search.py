@@ -3,6 +3,11 @@ import sqlite3
 con = sqlite3.connect("tutorial.db")
 cur = con.cursor()
 
-term = "無理はしないでね"
-res = cur.execute("SELECT term FROM entry WHERE term = ?", [term])
-print(res.fetchall())
+term = "仕方がない"
+res = cur.execute("SELECT term FROM entries WHERE term = ?", [term])
+get = res.fetchone()
+print(get)
+if get:
+    print("Yes")
+else:
+    print("None")
