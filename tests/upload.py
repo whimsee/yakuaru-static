@@ -52,8 +52,9 @@ with sqlite3.connect("tutorial.db") as con:
             except Exception as e:
                 print(e)
 
-        ## just do one
         print(cur.lastrowid)
+
+        ## just do one
         break
 
     res = cur.execute("SELECT * FROM entries")
