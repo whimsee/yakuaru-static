@@ -88,18 +88,27 @@ with sqlite3.connect("tutorial.db") as con:
             for defs in tl:
                 print(defs)
                 definition = get_tl(defs, "def")
+                defexp = get_tl(defs, "defexp")
                 source = get_tl(defs, "src")
                 jpsam = get_tl(defs, "jpsam")
                 ensam = get_tl(defs, "ensam")
                 credit = get_tl(defs, "credit")
                 img = get_tl(defs, "img")
+                samples = []
 
                 print(definition)
+                print(defexp)
                 print(source)
                 print(jpsam)
                 print(ensam)
                 print(credit)
                 print(img)
+
+                cur.execute("""
+                        INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "img") VALUES
+                        (?,?,?,?,?,?)
+                        """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
+
 
 
             break
