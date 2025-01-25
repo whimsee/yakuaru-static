@@ -63,8 +63,9 @@ with sqlite3.connect("tutorial.db") as con:
             defexp TEXT NOT NULL,
             src TEXT,
             samples TEXT,
-            credit TEXT NOT NULL,
-            image TEXT NOT NULL
+            credit TEXT,
+            image_format TEXT,
+            image_caption TEXT
             )
             """)
         except sqlite3.OperationalError:
@@ -153,9 +154,9 @@ with sqlite3.connect("tutorial.db") as con:
                 print(img)
 
                 cur.execute("""
-                        INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "img") VALUES
-                        (?,?,?,?,?,?)
-                        """, (definition, defexp, source, samples, credit, img))
+                        INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "image_format", "image_caption") VALUES
+                        (?,?,?,?,?,?,?)
+                        """, (definition, defexp, source, samples, credit, img_format, img_caption))
                 con.commit()
                 TL_ID = cur.lastrowid
             break
