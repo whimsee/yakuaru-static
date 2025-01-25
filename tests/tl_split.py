@@ -30,7 +30,7 @@ with open('glossaryMaster.json') as file:
         
         # print(tl)
         for entries in tl:
-            print(entries)
+            # print(entries)
             # for x in entries:
             #     print(get_item(tl, entries, "def"))
             definition = get_tl(entries, "def")
@@ -38,17 +38,29 @@ with open('glossaryMaster.json') as file:
             jpsam = get_tl(entries, "jpsam")
             ensam = get_tl(entries, "ensam")
             credit = get_tl(entries, "credit")
-            img = get_tl(entries, "img")
+            img_format = get_tl(entries, "img")
+            if img_format != None:
+              print(img_format[0])
 
-            print(definition)
-            print(source)
-            print(jpsam)
-            print(ensam)
-            print(credit)
-            print(img)
+            # try:
+            #     img_format = get_tl(entries, "img")[0]
+            #     img_caption = get_tl(entries, "img")[1]
+            # except KeyError as e:
+            #     img_format = None
+            #     img_caption = None
+
+            
+
+            # print(definition)
+            # print(source)
+            # print(jpsam)
+            # print(ensam)
+            # print(credit)
+            # print(img_format)
+            # print(img_caption)
 
 
-        break
+        # break
 
 #  def
 #     defexp

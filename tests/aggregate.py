@@ -14,6 +14,19 @@ def get_tl(data, field):
     except KeyError as e:
         return None
 
+def insert_samples(jpsam, ensam):
+    try:
+        cur.execute("""
+            INSERT INTO "samples" ("jpsam", "ensam") VALUES
+            (?,?)
+            """, (jpsam, ensam))
+        con.commit()
+        ID = str(cur.lastrowid)
+        print(ID)
+        return ID
+    except Exception as e:
+        print(e)
+
 with sqlite3.connect("tutorial.db") as con:
     with open('glossaryMaster.json') as file:
         data = json.load(file)
@@ -46,7 +59,7 @@ with sqlite3.connect("tutorial.db") as con:
             cur.execute("""
             CREATE TABLE "tl" (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            def TEXT UNIQUE NOT NULL,
+            def TEXT NOT NULL,
             defexp TEXT NOT NULL,
             src TEXT,
             samples TEXT,
@@ -57,7 +70,19 @@ with sqlite3.connect("tutorial.db") as con:
         except sqlite3.OperationalError:
             print("Table already exists")
 
-        
+        print("Creating samples table")
+        try:
+            cur.execute("""
+            CREATE TABLE "samples" (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            jpsam TEXT UNIQUE NOT NULL,
+            ensam TEXT NOT NULL
+            )
+            """)
+        except sqlite3.OperationalError:
+            print("Table already exists")
+
+        ### Each Term = item
         for items in data:
             term = get_item(data, items, "term")
             romakana = get_item(data, items, "romakana")
@@ -85,32 +110,54 @@ with sqlite3.connect("tutorial.db") as con:
                     break
             
             # print(tl)
+
+            ### Each Definition = defs in Term
             for defs in tl:
-                print(defs)
+                # print(defs)
                 definition = get_tl(defs, "def")
                 defexp = get_tl(defs, "defexp")
                 source = get_tl(defs, "src")
                 jpsam = get_tl(defs, "jpsam")
                 ensam = get_tl(defs, "ensam")
                 credit = get_tl(defs, "credit")
+
+                ## each img
+                # check if img exists and set parameters
                 img = get_tl(defs, "img")
-                samples = []
+                if img != None:
+                    img_format = img[0]
+                    img_caption = img[1]
+                else:
+                    img_format = None
+                    img_caption = None
+                
+                ## each sample
+                # check if samples exist for samples table
+                if jpsam != None and ensam != None:
+                    sample_entries = {
+                        "jpsam" : jpsam,
+                        "ensam" : ensam
+                        }
+                    samples = insert_samples(jpsam, ensam)
+                else:
+                    samples = None
+
 
                 print(definition)
                 print(defexp)
                 print(source)
                 print(jpsam)
                 print(ensam)
+                print(samples)
                 print(credit)
                 print(img)
 
                 cur.execute("""
                         INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "img") VALUES
                         (?,?,?,?,?,?)
-                        """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
-
-
-
+                        """, (definition, defexp, source, samples, credit, img))
+                con.commit()
+                TL_ID = cur.lastrowid
             break
 
 #  def
