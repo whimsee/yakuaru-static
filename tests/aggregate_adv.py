@@ -2,6 +2,9 @@ import sqlite3
 import json
 import re
 
+class TermExistsError(Exception):
+    pass
+
 def get_item(data, items, field):
     try:
         return data[items][field]
@@ -27,7 +30,7 @@ def insert_samples(jpsam, ensam):
     except Exception as e:
         print(e)
 
-with sqlite3.connect("tutorial.db") as con:
+with sqlite3.connect("yakuaru.db") as con:
     with open('glossaryMaster.json') as file:
         data = json.load(file)
 
@@ -38,7 +41,7 @@ with sqlite3.connect("tutorial.db") as con:
         print("Creating terms table")
         try:
             cur.execute("""
-                CREATE TABLE "terms" (
+                CREATE TABLE IF NOT EXISTS "terms" (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 term TEXT UNIQUE NOT NULL,
                 romakana TEXT NOT NULL,
@@ -57,7 +60,7 @@ with sqlite3.connect("tutorial.db") as con:
         print("Creating tl table")
         try:
             cur.execute("""
-                CREATE TABLE "tl" (
+                CREATE TABLE IF NOT EXISTS "tl" (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 def TEXT NOT NULL,
                 defexp TEXT,
@@ -74,7 +77,7 @@ with sqlite3.connect("tutorial.db") as con:
         print("Creating samples table")
         try:
             cur.execute("""
-                CREATE TABLE "samples" (
+                CREATE TABLE IF NOT EXISTS "samples" (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 jpsam TEXT NOT NULL,
                 ensam TEXT NOT NULL
@@ -109,6 +112,10 @@ with sqlite3.connect("tutorial.db") as con:
                 except Exception as e:
                     print(e)
                     break
+            else:
+                print(term, "already exists. Skipping.")
+                continue
+                # raise TermExistsError("Term must be updated instead")
             
             # print(tl)
 
@@ -121,10 +128,25 @@ with sqlite3.connect("tutorial.db") as con:
                 source_temp = get_tl(defs, "src")
                 jpsam = get_tl(defs, "jpsam")
                 ensam = get_tl(defs, "ensam")
-                credit = get_tl(defs, "credit")
+                credit_temp = get_tl(defs, "credit")
 
                 # prep source. convert list to string with separator
-                source = "^".join(str(x) for x in source_temp)
+                if source_temp != None:
+                    if isinstance(source_temp, list):
+                        source = "^".join(str(x) for x in source_temp)
+                    else:
+                        source = source_temp
+                else:
+                    source = None
+
+                # prep credit. convert list to string with separator
+                if credit_temp != None:
+                    if isinstance(credit_temp, list):
+                        credit = "^".join(str(x) for x in credit_temp)
+                    else:
+                        credit = credit_temp
+                else:
+                    credit = None
 
                 ## each img
                 # check if img exists and set parameters
@@ -132,6 +154,10 @@ with sqlite3.connect("tutorial.db") as con:
                 if img != None:
                     img_format = img[0]
                     img_caption = img[1]
+                    # try:
+                    #     img_caption = img[1]
+                    # except IndexError:
+                    #     img_caption = None
                 else:
                     img_format = None
                     img_caption = None
@@ -170,7 +196,7 @@ with sqlite3.connect("tutorial.db") as con:
                 UPDATE "terms" SET tl=? WHERE id = ?
                         """, (TL, TERM_ID))
             con.commit()
-            break
+            # break
             
 
 #  def
