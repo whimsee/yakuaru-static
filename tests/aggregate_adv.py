@@ -35,20 +35,20 @@ with sqlite3.connect("tutorial.db") as con:
         cur = con.cursor()
 
         # Create tables
-        print("Creating entries table")
+        print("Creating terms table")
         try:
             cur.execute("""
-            CREATE TABLE "entries" (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            term TEXT UNIQUE NOT NULL,
-            romakana TEXT NOT NULL,
-            lit TEXT,
-            tl TEXT,
-            hepburn TEXT NOT NULL,
-            kunrei TEXT NOT NULL,
-            nihon TEXT NOT NULL,
-            furigana TEXT,
-            altsearch TEXT NOT NULL
+                CREATE TABLE "terms" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                term TEXT UNIQUE NOT NULL,
+                romakana TEXT NOT NULL,
+                lit TEXT,
+                tl TEXT,
+                hepburn TEXT NOT NULL,
+                kunrei TEXT NOT NULL,
+                nihon TEXT NOT NULL,
+                furigana TEXT,
+                altsearch TEXT NOT NULL
             )
             """)
         except sqlite3.OperationalError:
@@ -57,15 +57,15 @@ with sqlite3.connect("tutorial.db") as con:
         print("Creating tl table")
         try:
             cur.execute("""
-            CREATE TABLE "tl" (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            def TEXT NOT NULL,
-            defexp TEXT NOT NULL,
-            src TEXT,
-            samples TEXT,
-            credit TEXT,
-            image_format TEXT,
-            image_caption TEXT
+                CREATE TABLE "tl" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                def TEXT NOT NULL,
+                defexp TEXT,
+                src TEXT,
+                samples TEXT,
+                credit TEXT,
+                image_format TEXT,
+                image_caption TEXT
             )
             """)
         except sqlite3.OperationalError:
@@ -74,10 +74,10 @@ with sqlite3.connect("tutorial.db") as con:
         print("Creating samples table")
         try:
             cur.execute("""
-            CREATE TABLE "samples" (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            jpsam TEXT UNIQUE NOT NULL,
-            ensam TEXT NOT NULL
+                CREATE TABLE "samples" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                jpsam TEXT NOT NULL,
+                ensam TEXT NOT NULL
             )
             """)
         except sqlite3.OperationalError:
@@ -96,16 +96,16 @@ with sqlite3.connect("tutorial.db") as con:
 
             tl = get_item(data, items, "tl")
 
-            res = cur.execute("SELECT term FROM entries WHERE term = ?", [term])
+            res = cur.execute("SELECT term FROM terms WHERE term = ?", [term])
             if res.fetchone() == None:
                 try:
                     cur.execute("""
-                        INSERT INTO "entries" ("term", "romakana", "lit", "hepburn", "kunrei", "nihon", "furigana", "altsearch") VALUES
+                        INSERT INTO "terms" ("term", "romakana", "lit", "hepburn", "kunrei", "nihon", "furigana", "altsearch") VALUES
                         (?,?,?,?,?,?,?,?)
                         """, (term, romakana, lit, hepburn, kunrei, nihon, furigana, altsearch))
                     con.commit()
-                    ENTRY_ID = cur.lastrowid
-                    print(ENTRY_ID)
+                    TERM_ID = cur.lastrowid
+                    print(TERM_ID)
                 except Exception as e:
                     print(e)
                     break
@@ -113,14 +113,18 @@ with sqlite3.connect("tutorial.db") as con:
             # print(tl)
 
             ### Each Definition = defs in Term
+            TL_ID = []
             for defs in tl:
                 # print(defs)
                 definition = get_tl(defs, "def")
                 defexp = get_tl(defs, "defexp")
-                source = get_tl(defs, "src")
+                source_temp = get_tl(defs, "src")
                 jpsam = get_tl(defs, "jpsam")
                 ensam = get_tl(defs, "ensam")
                 credit = get_tl(defs, "credit")
+
+                # prep source. convert list to string with separator
+                source = "^".join(str(x) for x in source_temp)
 
                 ## each img
                 # check if img exists and set parameters
@@ -154,12 +158,20 @@ with sqlite3.connect("tutorial.db") as con:
                 print(img)
 
                 cur.execute("""
-                        INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "image_format", "image_caption") VALUES
-                        (?,?,?,?,?,?,?)
-                        """, (definition, defexp, source, samples, credit, img_format, img_caption))
+                    INSERT INTO "tl" ("def", "defexp", "src", "samples", "credit", "image_format", "image_caption") VALUES
+                    (?,?,?,?,?,?,?)
+                    """, (definition, defexp, source, samples, credit, img_format, img_caption))
                 con.commit()
-                TL_ID = cur.lastrowid
+                TL_ID.append(cur.lastrowid)
+            print(TL_ID)
+            TL = ",".join(str(x) for x in TL_ID)
+            print(TL)
+            cur.execute("""
+                UPDATE "terms" SET tl=? WHERE id = ?
+                        """, (TL, TERM_ID))
+            con.commit()
             break
+            
 
 #  def
 #     defexp
