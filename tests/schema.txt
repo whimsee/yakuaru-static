@@ -19,7 +19,36 @@ furigana
     ensam (refer to samples)
     credit
     genre[](remove)
-    image 
-        - id
-        - link
-    
+    image format
+    image caption
+
+Final:
+CREATE TABLE "terms" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                term TEXT UNIQUE NOT NULL,
+                romakana TEXT NOT NULL,
+                lit TEXT,
+                tl TEXT,
+                hepburn TEXT NOT NULL,
+                kunrei TEXT NOT NULL,
+                nihon TEXT NOT NULL,
+                furigana TEXT,
+                altsearch TEXT NOT NULL
+            )
+
+CREATE TABLE "tl" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                def TEXT NOT NULL,
+                defexp TEXT,
+                src TEXT,
+                samples TEXT,
+                credit TEXT,
+                image_format TEXT,
+                image_caption TEXT
+            )
+
+CREATE TABLE "samples" (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                jpsam TEXT NOT NULL,
+                ensam TEXT NOT NULL
+            )
