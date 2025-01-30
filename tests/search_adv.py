@@ -25,10 +25,10 @@ search_term = "%" + term + "%"
 # for x in get:
 #     print(x)
 
-res = cur.execute("SELECT term,romakana,lit,tl,hepburn,kunrei,nihon,furigana,altsearch FROM terms WHERE term LIKE ?", [search_term])
+res = cur.execute("SELECT term, romakana, lit, tl, hepburn, kunrei, nihon, furigana, altsearch FROM terms WHERE term LIKE ?", [search_term])
 get = res.fetchall()
 for hit in get:
-    term,romakana,lit,tl,hepburn,kunrei,nihon,furigana,altsearch = hit
+    term, romakana, lit , tl, hepburn, kunrei, nihon, furigana, altsearch = hit
     print("Term:", term)
     print("Romakana:", romakana)
     print("Lit:", lit)
@@ -39,12 +39,16 @@ for hit in get:
     print("Furigana:", furigana)
     print("Altsearch:", altsearch)
 
-# term TEXT UNIQUE NOT NULL,
-#                 romakana TEXT NOT NULL,
-#                 lit TEXT,
-#                 tl TEXT,
-#                 hepburn TEXT NOT NULL,
-#                 kunrei TEXT NOT NULL,
-#                 nihon TEXT NOT NULL,
-#                 furigana TEXT,
-#                 altsearch TEXT NOT NULL
+    if tl != None:
+        tl_split = tl.split(",")
+        for key in tl_split:
+            print(key)
+            res = cur.execute("SELECT def, defexp, src, samples, credit, image_format, image_caption FROM tl WHERE id = ?", [key])
+            definition, defexp, src, samples, credit, image_format, image_caption = res.fetchone()
+            print("definition:", definition)
+            print("defexp:", defexp)
+            print("src:", src)
+            print("samples:", samples)
+            print("credit:", credit)
+            print("img_format:", image_format)
+            print("img_caption:", image_caption)
