@@ -25,7 +25,17 @@ search_term = "%" + term + "%"
 # for x in get:
 #     print(x)
 
-res = cur.execute("SELECT * FROM terms WHERE term LIKE ?", [search_term])
+res = cur.execute("SELECT term,romakana,lit,tl,hepburn,kunrei,nihon,furigana,altsearch FROM terms WHERE term LIKE ?", [search_term])
 get = res.fetchall()
 for hit in get:
     print(hit)
+
+# term TEXT UNIQUE NOT NULL,
+#                 romakana TEXT NOT NULL,
+#                 lit TEXT,
+#                 tl TEXT,
+#                 hepburn TEXT NOT NULL,
+#                 kunrei TEXT NOT NULL,
+#                 nihon TEXT NOT NULL,
+#                 furigana TEXT,
+#                 altsearch TEXT NOT NULL
