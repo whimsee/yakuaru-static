@@ -1,4 +1,4 @@
-from sqlmodel import Field, Session, SQLModel, select, create_engine
+from sqlmodel import Field, Session, SQLModel, select, create_engine, col
 
 class Hero(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -74,11 +74,15 @@ engine = create_engine(sqlite_url, echo=True)
 
 def select_terms():
     with Session(engine) as session:
+        terms_hit = []
+        # Two methods: Second is safer without the %
         # statement = select(Terms).where(Terms.term.like("%ない%"))
-        statement = select(Terms).where(col(Terms.term).contains("ない"))
+        statement = select(Terms).where(col(Terms.term).contains("事"))
         results = session.exec(statement)
         for term in results:
             print(term.term)
+            terms_hit.append(term.term)
+        print(terms_hit)
 
 
 def main():
