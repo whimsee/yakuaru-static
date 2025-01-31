@@ -74,10 +74,10 @@ engine = create_engine(sqlite_url, echo=True)
 
 def select_terms():
     with Session(engine) as session:
-        statement = select(Terms)
+        statement = select(Terms).where(Terms.term.like("%ない%"))
         results = session.exec(statement)
         for term in results:
-            print(term.lit)
+            print(term.term)
 
 
 def main():
