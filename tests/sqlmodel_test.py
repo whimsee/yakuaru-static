@@ -81,8 +81,9 @@ def select_terms():
         results = session.exec(statement)
         for term in results:
             print(term.term)
-            terms_hit.append(term.term)
-        print(terms_hit)
+            print(term.tl)
+            # if term.tl != None:
+                # tl_statement = select(Terms).where(col(Terms.term).contains("事"))
 
 
 def main():
