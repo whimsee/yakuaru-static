@@ -1,5 +1,23 @@
-from sqlmodel import Field, Session, SQLModel, select, create_engine, col
+from sqlmodel import Field, Session, Relationship, SQLModel, select, create_engine, col
 
+
+
+class termTL_link(SQLModel, table=True):
+    term_id: int | None = Field(default=None, foreign_key="term.id", primary_key=True)
+    tl_id: int | None = Field(default=None, foreign_key="tl.id", primary_key=True)
+
+class Terms(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str | None = Field(default=None)
+    romakana: str | None = Field(default=None)
+    lit: str
+    hepburn: str
+    kunrei: str
+    nihon: str
+    furigana: str
+    altsearch: str
+
+    tl: list["tl"] = Relationship(back_populates="tls", link_model=termTL_link)
 
 
 # import sqlite3
