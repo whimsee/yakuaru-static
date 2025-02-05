@@ -6,8 +6,25 @@ class termTL_link(SQLModel, table=True):
     term_id: int | None = Field(default=None, foreign_key="term.id", primary_key=True)
     tl_id: int | None = Field(default=None, foreign_key="tl.id", primary_key=True)
 
+class tlSample_link(SQLModel, table=True):
+    tl_id: int | None = Field(default=None, foreign_key="tl.id", primary_key=True)
+    sample_id: int | None = Field(default=None, foreign_key="sample.id", primary_key=True)
+
 class TL(SQLModel, table=True):
-    pass
+    id: int | None = Field(default=None, primary_key=True)
+    definition: str
+    defexp: str
+    src: str
+    credit: str
+    image_format: str
+    image_caption: str
+
+    samples: list["Samples"] = Relationship(back_populates="tls", link_model=tlSample_link)
+
+class Samples(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    jpsam: str | None = Field(default=None)
+    ensam: str
 
 class Terms(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -20,7 +37,7 @@ class Terms(SQLModel, table=True):
     furigana: str
     altsearch: str
 
-    tl: list["TL"] = Relationship(back_populates="tl", link_model=termTL_link)
+    tl: list["TL"] = Relationship(back_populates="terms", link_model=termTL_link)
 
 
 # import sqlite3
