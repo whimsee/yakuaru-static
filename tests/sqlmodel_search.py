@@ -1,3 +1,6 @@
+from models import *
+from sqlmodel import Session, select, col
+
 import sqlite3
 
 con = sqlite3.connect("yakuaru.db")
