@@ -10,11 +10,18 @@ engine = create_engine(sqlite_url)
 
 with Session(engine) as session:
     # statement = select(Terms)
+    # search_term = "["
     search_term = "仕方"
     # Search LIKE
     statement = select(Terms).where(col(Terms.name).contains(search_term))
     results = session.exec(statement)
-    for terms in results:
-        print(terms.name)
-        for tls in terms.tl:
-            print(tls.definition)
+    all_results = results.all()
+    print(len(all_results))
+
+    if len(all_results) == 0:
+        print("None")
+    else:
+        for terms in all_results:
+            print(terms.name)
+            for tls in terms.tl:
+                print(tls.definition)
