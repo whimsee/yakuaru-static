@@ -41,7 +41,7 @@ def get_tl(data, field):
 #         print(e)
 
 if __name__ == "__main__":
-    # create_db_and_tables()
+    create_db_and_tables()
     with open('glossaryMaster.json') as file:
         data = json.load(file)
 
@@ -65,6 +65,7 @@ if __name__ == "__main__":
             #     nihon=nihon,
             #     furigana=furigana,
             #     altsearch=altsearch
+            #     tl=TL_TERMS
             # )
 
             # print(term_add)
@@ -120,13 +121,20 @@ if __name__ == "__main__":
                 # check if samples exist for samples table
                 if jpsam != None and ensam != None:
                     samples = []
-                    sample_entries = {
-                        "jpsam" : jpsam,
-                        "ensam" : ensam
-                        }
-                    samples = insert_samples(jpsam, ensam)
+                    # temp_sample = Samples(jpsam=jpsam, ensam=ensam)
+                    # samples.append(temp_sample)
                 else:
                     samples = None
+
+                tl_add = TL(
+                    definition=definition,
+                    defexp=defexp,
+                    src=source,
+                    credit=credit,
+                    image_format=img_format,
+                    image_caption=img_caption,
+                    samples=None
+                )
 
                 # def insert_samples(jpsam, ensam):
                 #     try:
@@ -141,14 +149,14 @@ if __name__ == "__main__":
                 #     except Exception as e:
                 #         print(e)
 
-                print(definition)
-                print(defexp)
-                print(source)
-                print(jpsam)
-                print(ensam)
-                print(samples)
-                print(credit)
-                print(img)
+                # print(definition)
+                # print(defexp)
+                # print(source)
+                # print(jpsam)
+                # print(ensam)
+                # print(samples)
+                # print(credit)
+                # print(img)
 
 
             break
