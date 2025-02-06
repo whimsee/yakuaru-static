@@ -28,4 +28,4 @@ class Terms(SQLModel, table=True):
     furigana: str | None = None
     altsearch: str | None = None
 
-    tl: list["TL"] = Relationship(back_populates="terms", link_model=termTL_link) | None = None
+    tl: None | list["TL"] = Relationship(back_populates="terms", link_model=termTL_link)
