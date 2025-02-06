@@ -9,14 +9,10 @@ sqlite_url = f"sqlite:///{sqlite_file_name}"
 # engine = create_engine(sqlite_url, echo=True)
 engine = create_engine(sqlite_url)
 
-def search(search_term):
+def search(search_term, offset=0, limit=10):
     with Session(engine) as session:
-        # statement = select(Terms)
-        # search_term = "["
-        # search_term = "仕方"
-        search_term = "あ"
         # Search LIKE
-        statement = select(Terms).where(col(Terms.name).contains(search_term))
+        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
         results = session.exec(statement)
         all_results = results.all()
         print(len(all_results))
@@ -43,6 +39,9 @@ def search_one(search_term):
         # for terms in one_result:
         #     print(terms)
 
-    
+print("Search One")
 search_one("たしか")
 search_one("仕方")
+
+print("Search all")
+search("あ",10,3)
