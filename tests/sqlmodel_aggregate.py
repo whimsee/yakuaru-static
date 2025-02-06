@@ -77,61 +77,6 @@ SQLModel.metadata.create_all(engine)
 #     except Exception as e:
 #         print(e)
 
-# with sqlite3.connect("yakuaru.db") as con:
-#     with open('glossaryMaster.json') as file:
-#         data = json.load(file)
-
-#         # Init cursor
-#         cur = con.cursor()
-
-#         # Create tables
-#         print("Creating terms table")
-#         try:
-#             cur.execute("""
-#                 CREATE TABLE IF NOT EXISTS "terms" (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                 term TEXT UNIQUE NOT NULL,
-#                 romakana TEXT NOT NULL,
-#                 lit TEXT,
-#                 tl TEXT,
-#                 hepburn TEXT NOT NULL,
-#                 kunrei TEXT NOT NULL,
-#                 nihon TEXT NOT NULL,
-#                 furigana TEXT,
-#                 altsearch TEXT NOT NULL
-#             )
-#             """)
-#         except sqlite3.OperationalError:
-#             print("Table already exists")
-
-#         print("Creating tl table")
-#         try:
-#             cur.execute("""
-#                 CREATE TABLE IF NOT EXISTS "tl" (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                 def TEXT NOT NULL,
-#                 defexp TEXT,
-#                 src TEXT,
-#                 samples TEXT,
-#                 credit TEXT,
-#                 image_format TEXT,
-#                 image_caption TEXT
-#             )
-#             """)
-#         except sqlite3.OperationalError:
-#             print("Table already exists")
-
-#         print("Creating samples table")
-#         try:
-#             cur.execute("""
-#                 CREATE TABLE IF NOT EXISTS "samples" (
-#                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                 jpsam TEXT NOT NULL,
-#                 ensam TEXT NOT NULL
-#             )
-#             """)
-#         except sqlite3.OperationalError:
-#             print("Table already exists")
 
 #         ### Each Term = item
 #         for items in data:
