@@ -27,19 +27,6 @@ def get_tl(data, field):
     except KeyError as e:
         return None
 
-# def insert_samples(jpsam, ensam):
-#     try:
-#         cur.execute("""
-#             INSERT INTO "samples" ("jpsam", "ensam") VALUES
-#             (?,?)
-#             """, (jpsam, ensam))
-#         con.commit()
-#         ID = str(cur.lastrowid)
-#         print(ID)
-#         return ID
-#     except Exception as e:
-#         print(e)
-
 if __name__ == "__main__":
     create_db_and_tables()
     with open('glossaryMaster.json') as file:
