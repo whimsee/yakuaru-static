@@ -4,7 +4,7 @@ from sqlmodel import Session, select, col
 import json
 import re
 
-sqlite_file_name = "yakutest.db"
+sqlite_file_name = "yakuaru.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 engine = create_engine(sqlite_url, echo=True)
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 ### Prep source. convert list to string with separator
                 if source_temp != None:
                     if isinstance(source_temp, list):
-                        source = "^".join(str(x) for x in source_temp)
+                        source = "^*".join(str(x) for x in source_temp)
                     else:
                         source = source_temp
                 else:
@@ -70,7 +70,7 @@ if __name__ == "__main__":
                 ### prep credit. convert list to string with separator
                 if credit_temp != None:
                     if isinstance(credit_temp, list):
-                        credit = "^".join(str(x) for x in credit_temp)
+                        credit = "^*".join(str(x) for x in credit_temp)
                     else:
                         credit = credit_temp
                 else:

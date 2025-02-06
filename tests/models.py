@@ -6,12 +6,12 @@ class termTL_link(SQLModel, table=True):
 
 class TL(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    definition: str
+    definition: str = Field(index=True)
     defexp: str | None = None
-    src: str | None = None
+    src: str | None = Field(default=None, index=True)
     credit: str | None = None
-    jpsam: str | None = None
-    ensam: str | None = None
+    jpsam: str | None = Field(default=None, index=True)
+    ensam: str | None = Field(default=None, index=True)
     image_format: str | None = None
     image_caption: str | None = None
 
@@ -19,13 +19,13 @@ class TL(SQLModel, table=True):
 
 class Terms(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    name: str
-    romakana: str
+    name: str = Field(index=True)
+    romakana: str = Field(index=True)
     lit: str | None = None
-    hepburn: str | None = None
-    kunrei: str | None = None
-    nihon: str | None = None
+    hepburn: str | None = Field(default=None, index=True)
+    kunrei: str | None = Field(default=None, index=True)
+    nihon: str | None = Field(default=None, index=True)
     furigana: str | None = None
-    altsearch: str | None = None
+    altsearch: str | None = Field(default=None, index=True)
 
     tl: None | list["TL"] = Relationship(back_populates="terms", link_model=termTL_link)
