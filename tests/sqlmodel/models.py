@@ -1,4 +1,5 @@
-from sqlmodel import SQLModel, create_engine, Field, Relationship
+from sqlmodel import SQLModel, create_engine, Field, Relationship, Column, String
+import sqlalchemy
 
 # class termTL_link(SQLModel, table=True):
 #     term_id: int | None = Field(default=None, foreign_key="terms.id", primary_key=True)
@@ -9,13 +10,14 @@ from sqlmodel import SQLModel, create_engine, Field, Relationship
 class Terms(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
+    altterm: str = Field(default=None, index=True)
     romakana: str = Field(index=True)
     lit: str | None = None
     hepburn: str | None = Field(default=None, index=True)
     kunrei: str | None = Field(default=None, index=True)
     nihon: str | None = Field(default=None, index=True)
     furigana: str | None = None
-    altsearch: str | None = Field(default=None, index=True)
+    # altsearch: str | None = Field(default=None, index=True)
 
     tl: None | list["TL"] = Relationship(back_populates="terms", cascade_delete=True)
 

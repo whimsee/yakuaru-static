@@ -2,12 +2,17 @@ from models import *
 from sqlmodel import Session, select, col
 from sqlalchemy.orm.exc import NoResultFound
 
-sqlite_file_name = "yakuaru.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from secrets import secrets
 
-### echo for debug
-# engine = create_engine(sqlite_url, echo=True)
-engine = create_engine(sqlite_url)
+## SQLite
+# sqlite_file_name = "yakuaru.db"
+# sqlite_url = f"sqlite:///{sqlite_file_name}"
+# engine = create_engine(sqlite_url)
+
+## PostgreSQL
+url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+engine = create_engine(url)
+# engine = create_engine(url)
 
 def search(search_term, offset=0, limit=10):
     with Session(engine) as session:
@@ -24,6 +29,7 @@ def search(search_term, offset=0, limit=10):
                 print(terms.name)
                 for tls in terms.tl:
                     print(tls.definition)
+                    print(tls.src)
 
 def search_one(search_term):
     with Session(engine) as session:
@@ -31,6 +37,7 @@ def search_one(search_term):
         try:
             one_result = session.exec(statement).one()
             print(one_result is None)
+            print(one_result)
             print(one_result.name)
         except NoResultFound:
             print("No result")

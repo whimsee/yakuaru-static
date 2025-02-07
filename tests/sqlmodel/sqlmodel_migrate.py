@@ -4,11 +4,25 @@ from sqlmodel import Session, select, col
 import json
 import re
 
-sqlite_file_name = "yakuaru.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from secrets import secrets
 
-# engine = create_engine(sqlite_url, echo=True)
-engine = create_engine(sqlite_url)
+POSTGRES = False
+
+### SQLite
+# sqlite_file_name = "yakuaru.db"
+# url = f"sqlite:///{sqlite_file_name}"
+# engine = create_engine(url, echo=True)
+
+## Mariadb
+# url = "mysql+pymysql://{}:{}@{}:{}/yakudb?charset=utf8mb4".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+# engine = create_engine(url, echo=True)
+
+## PostgreSQL
+url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+# engine = create_engine(url, echo=True)
+engine = create_engine(url)
+POSTGRES = True
+
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
@@ -36,13 +50,14 @@ if __name__ == "__main__":
         ### Each Term = item
         for items in data:
             term = get_item(data, items, "term")
+            altterm = get_item(data, items, "altterm")
             romakana = get_item(data, items, "romakana")
             lit = get_item(data, items, "lit")
             hepburn = get_item(data, items, "hepburn")
             kunrei = get_item(data, items, "kunrei")
             nihon = get_item(data, items, "nihon")
             furigana = get_item(data, items, "furigana")
-            altsearch = get_item(data, items, "altsearch")
+            # altsearch = get_item(data, items, "altsearch")
 
             tl = get_item(data, items, "tl")
 
@@ -61,21 +76,26 @@ if __name__ == "__main__":
             
                 ### Prep source. convert list to string with separator
                 if source_temp != None:
-                    if isinstance(source_temp, list):
+                    if POSTGRES:
+                        source = source_temp
+                    elif POSTGRES == False and isinstance(source_temp, list):
                         source = "^*".join(str(x) for x in source_temp)
                     else:
                         source = source_temp
                 else:
                     source = None
 
-                ### prep credit. convert list to string with separator
+                ### Prep credit. convert list to string with separator
                 if credit_temp != None:
-                    if isinstance(credit_temp, list):
+                    if POSTGRES:
+                        credit = credit_temp
+                    elif POSTGRES == False and isinstance(credit_temp, list):
                         credit = "^*".join(str(x) for x in credit_temp)
                     else:
                         credit = credit_temp
                 else:
                     credit = None
+
 
                 ### each img
                 # check if img exists and set parameters
@@ -106,13 +126,14 @@ if __name__ == "__main__":
 
             term_add = Terms(
                 name=term,
+                altterm=altterm,
                 romakana=romakana,
                 lit=lit,
                 hepburn=hepburn,
                 kunrei=kunrei,
                 nihon=nihon,
                 furigana=furigana,
-                altsearch=altsearch,
+                # altsearch=altsearch,
                 tl=TL_TERMS
             )
 
