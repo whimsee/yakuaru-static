@@ -7,12 +7,14 @@ from secrets import secrets
 url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 engine = create_engine(url)
 
-async def term_search(data, search_term:str, letters=False):
+def term_search(search_term:str, letters=False, offset=10, limit=0):
     found_list = []
     matches = []
     found = False
 
-    pattern = re.compile(search_term, flags=re.IGNORECASE)
+
+    with Session(engine) as session:
+        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
 
     if not letters:
         for term,value in data.items():
