@@ -14,7 +14,11 @@ url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'],
 engine = create_engine(url)
 # engine = create_engine(url)
 
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
 def search(search_term, offset=0, limit=10):
+    create_db_and_tables()
     with Session(engine) as session:
         # Search LIKE
         statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
