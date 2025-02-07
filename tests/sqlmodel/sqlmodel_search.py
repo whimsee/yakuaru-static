@@ -41,6 +41,17 @@ def search_one(search_term):
             print(one_result.name)
         except NoResultFound:
             print("No result")
+
+def search_TL(search_term):
+    with Session(engine) as session:
+        statement = select(TL).where(col(TL.definition).contains(search_term))
+        try:
+            one_result = session.exec(statement).one()
+            print(one_result is None)
+            print(one_result)
+            # print(one_result.name)
+        except NoResultFound:
+            print("No result")
         
         # for terms in one_result:
         #     print(terms)
@@ -50,4 +61,9 @@ search_one("たしか")
 search_one("仕方")
 
 print("Search all")
+search("仕方がない")
 search("あ",10,3)
+
+
+print("Search TL")
+search_TL("cannot")
