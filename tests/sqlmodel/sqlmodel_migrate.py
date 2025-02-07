@@ -117,5 +117,4 @@ if __name__ == "__main__":
 
             with Session(engine) as session:
                 session.add(term_add)
-
                 session.commit()
