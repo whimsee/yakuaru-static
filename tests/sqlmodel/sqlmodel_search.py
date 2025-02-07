@@ -28,9 +28,8 @@ def search(search_term, offset=0, limit=10):
 def search_one(search_term):
     with Session(engine) as session:
         statement = select(Terms).where(Terms.name == search_term)
-        results = session.exec(statement)
         try:
-            one_result = results.one()
+            one_result = session.exec(statement).one()
             print(one_result is None)
             print(one_result.name)
         except NoResultFound:
