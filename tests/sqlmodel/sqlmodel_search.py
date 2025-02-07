@@ -30,6 +30,10 @@ def search(search_term, offset=0, limit=10):
                 for tls in terms.tl:
                     print(tls.definition)
                     print(tls.src)
+                    try:
+                        print(tls.src[0])
+                    except TypeError:
+                        pass
 
 def search_one(search_term):
     with Session(engine) as session:
