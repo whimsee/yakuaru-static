@@ -5,7 +5,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from secrets import secrets
 
 url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
-engine = create_engine(url)
+connect_args = {"check_same_thread": False}
+engine = create_engine(url, echo=True, connect_args=connect_args)
 
 def term_search(search_term:str, letters=False, offset=10, limit=0):
     found_list = []
