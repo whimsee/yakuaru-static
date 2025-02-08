@@ -18,14 +18,28 @@ def term_search(search_term:str, letters=False, offset=0, limit=0):
     found = False
 
     with Session(engine) as session:
+        # Search LIKE
         statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
-        result = session.exec(statement)
-        hit = result.all()
-        print(len(hit))
+        results = session.exec(statement)
+        all_results = results.all()
+        print(len(all_results))
+
+        if len(all_results) == 0:
+            print("None")
+        else:
+            for terms in all_results:
+                print(terms.name)
+                for tls in terms.tl:
+                    print(tls.definition)
+                    print(tls.src)
+                    try:
+                        print(tls.src[0])
+                    except TypeError:
+                        pass
 
 create_db_and_tables()
 
-term_search("仕方")
+term_search("仕方がない")
 #     if not letters:
 #         for term,value in data.items():
 
