@@ -7,15 +7,15 @@ from secrets import secrets
 url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 # connect_args = {"check_same_thread": False}
 # engine = create_engine(url, echo=True, connect_args=connect_args)
-engine = create_engine(url, echo=True)
+engine = create_engine(url)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-def term_search(search_term:str, letters=False, offset=0, limit=0):
-    found_list = []
-    matches = []
-    found = False
+def term_search(search_term:str, letters=False, offset=0, limit=10):
+    # found_list = []
+    # matches = []
+    # found = False
 
     with Session(engine) as session:
         # Search LIKE
