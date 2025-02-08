@@ -12,7 +12,7 @@ engine = create_engine(url, echo=True)
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-def term_search(search_term:str, letters=False, offset=10, limit=0):
+def term_search(search_term:str, letters=False, offset=0, limit=0):
     found_list = []
     matches = []
     found = False
