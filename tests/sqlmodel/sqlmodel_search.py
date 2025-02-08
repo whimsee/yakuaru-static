@@ -18,7 +18,6 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 def search(search_term, offset=0, limit=10):
-    create_db_and_tables()
     with Session(engine) as session:
         # Search LIKE
         statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
@@ -64,6 +63,7 @@ def search_TL(search_term):
         # for terms in one_result:
         #     print(terms)
 
+create_db_and_tables()
 print("Search One")
 search_one("たしか")
 search_one("仕方")

@@ -5,23 +5,27 @@ from sqlalchemy.orm.exc import NoResultFound
 from secrets import secrets
 
 url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
-connect_args = {"check_same_thread": False}
-engine = create_engine(url, echo=True, connect_args=connect_args)
+# connect_args = {"check_same_thread": False}
+# engine = create_engine(url, echo=True, connect_args=connect_args)
+engine = create_engine(url, echo=True)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
+def term_search(search_term:str, letters=False, offset=10, limit=0):
+    found_list = []
+    matches = []
+    found = False
+
+    with Session(engine) as session:
+        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
+        result = session.exec(statement)
+        hit = result.all()
+        print(len(hit))
+
 create_db_and_tables()
 
-# def term_search(search_term:str, letters=False, offset=10, limit=0):
-#     found_list = []
-#     matches = []
-#     found = False
-
-
-#     with Session(engine) as session:
-#         statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
-
+term_search("仕方")
 #     if not letters:
 #         for term,value in data.items():
 
