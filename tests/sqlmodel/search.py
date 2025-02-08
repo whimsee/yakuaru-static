@@ -24,18 +24,6 @@ def term_search(search_term:str, letters=False, offset=0, limit=10):
         all_results = results.all()
         print(len(all_results))
 
-        if len(all_results) == 0:
-            print("None")
-        else:
-            for terms in all_results:
-                print(terms.name)
-                for tls in terms.tl:
-                    print(tls.definition)
-                    print(tls.src)
-                    try:
-                        print(tls.src[0])
-                    except TypeError:
-                        pass
 
 create_db_and_tables()
 
