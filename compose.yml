@@ -1,0 +1,7 @@
+services:
+  yakuaru-static:
+     container_name: yakuaru-static
+     image: yakuaru-static
+     ports:
+       - 8060:8060
+     restart: unless-stopped
