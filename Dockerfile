@@ -1,6 +1,7 @@
 # 
-FROM python:3.9.21-bookworm
+FROM python:3.12
 
+COPY --from=ghcr.io/multi-py/python-uvicorn:py3.12-slim-LATEST /usr/local/lib/python3.12/site-packages/* /usr/local/lib/python3.12/site-packages/
 # 
 WORKDIR /code
 
