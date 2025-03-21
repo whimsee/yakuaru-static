@@ -10,7 +10,7 @@ from secrets import secrets
 # engine = create_engine(sqlite_url)
 
 ## PostgreSQL
-url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+url = "postgresql://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 engine = create_engine(url)
 # engine = create_engine(url)
 
