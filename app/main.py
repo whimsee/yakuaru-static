@@ -15,6 +15,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 # from fastapi.middleware.cors import CORSMiddleware
 
+from models import *
+from sqlmodel import Session, select, col
+from sqlalchemy.orm.exc import NoResultFound
+
+from secrets import secrets
+
 from fastapi_htmx import htmx, htmx_init
 
 def strip_punc(text):
@@ -112,20 +118,6 @@ async def term_search(data, search_term:str, letters=False):
 
 app = FastAPI()
 
-# origins = [
-#     "https://test2.yamaguchi.duckdns.org",
-#     "http://test2.yamaguchi.duckdns.org",
-# ]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-#     max_age=3600,
-# )
-
 BASE_PATH = Path(__file__).resolve().parent
 
 app.mount("/css", StaticFiles(directory=str(BASE_PATH /"css")), name="css")
@@ -137,6 +129,36 @@ app.mount("/sass", StaticFiles(directory=str(BASE_PATH /"sass")), name="sass")
 app.mount("/fonts", StaticFiles(directory=str(BASE_PATH /"fonts")), name="fonts")
 
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
+
+## PostgreSQL
+url = "postgresql://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+engine = create_engine(url)
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+def search(search_term, offset=0, limit=10):
+    with Session(engine) as session:
+        # Search LIKE
+        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
+        results = session.exec(statement)
+        all_results = results.all()
+        print(len(all_results))
+
+        if len(all_results) == 0:
+            print("None")
+        else:
+            for terms in all_results:
+                print(terms.name)
+                for tls in terms.tl:
+                    print(tls.definition)
+                    print(tls.src)
+                    try:
+                        print(tls.src[0])
+                    except TypeError:
+                        pass
+
+create_db_and_tables()
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
