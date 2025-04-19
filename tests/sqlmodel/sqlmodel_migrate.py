@@ -18,7 +18,7 @@ POSTGRES = False
 # engine = create_engine(url, echo=True)
 
 ## PostgreSQL
-url = "postgresql://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 # engine = create_engine(url, echo=True)
 engine = create_engine(url)
 POSTGRES = True

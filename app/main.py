@@ -132,7 +132,7 @@ app.mount("/fonts", StaticFiles(directory=str(BASE_PATH /"fonts")), name="fonts"
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 ## PostgreSQL
-url = "postgresql://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 engine = create_engine(url)
 
 def create_db_and_tables():
