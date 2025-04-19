@@ -15,11 +15,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 # from fastapi.middleware.cors import CORSMiddleware
 
-from models import *
+from . import models
+
 from sqlmodel import Session, select, col
 from sqlalchemy.orm.exc import NoResultFound
 
-from secrets import secrets
+from . import secrets
 
 from fastapi_htmx import htmx, htmx_init
 
