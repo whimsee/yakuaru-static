@@ -18,4 +18,6 @@ COPY ./app /code/app
 # 
 #ENV FORWARDED_ALLOW_IPS=*
 #CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8060"]
-CMD ["fastapi", "run", "app/main.py", "--proxy-headers", "--port", "8060"]
+WORKDIR /code/app
+
+CMD ["fastapi", "run", "main.py", "--proxy-headers", "--port", "8060"]

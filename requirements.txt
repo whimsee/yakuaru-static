@@ -4,3 +4,4 @@ uvicorn==0.34.0
 Jinja2==3.1.6
 fastapi-htmx==0.5.0
 wanakana-python==1.2.2
+sqlmodel==0.0.24
