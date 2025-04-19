@@ -1,4 +1,5 @@
 tests/.venv
+tests/sqlmodel/secrets.py
 *Zone.Identifier
 venv
 app/secrets.py
