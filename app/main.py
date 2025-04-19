@@ -132,11 +132,11 @@ app.mount("/fonts", StaticFiles(directory=str(BASE_PATH /"fonts")), name="fonts"
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 ## PostgreSQL
-url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
-engine = create_engine(url)
+url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets.secrets['USER'], secrets.secrets['PASS'], secrets.secrets['IP_ADDRESS'], secrets.secrets['PORT'])
+engine = models.create_engine(url)
 
 def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+    models.SQLModel.metadata.create_all(engine)
 
 def search(search_term, offset=0, limit=10):
     with Session(engine) as session:
