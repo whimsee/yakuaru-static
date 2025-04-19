@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from secrets import secrets
 
-url = "postgresql://{}:{}@{}:{}/yakudb".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
+url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets['PASS'], secrets['IP_ADDRESS'], secrets['PORT'])
 # connect_args = {"check_same_thread": False}
 # engine = create_engine(url, echo=True, connect_args=connect_args)
 engine = create_engine(url)
