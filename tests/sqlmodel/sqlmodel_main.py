@@ -43,6 +43,31 @@ def search(search_term, offset=0, limit=10):
             #         except TypeError:
             #             pass
 
+def search_main(search_term, offset=0, limit=10):
+    matches = {}
+    with Session(engine) as session:
+        # Search LIKE
+        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
+        results = session.exec(statement)
+        all_results = results.all()
+        # print(len(all_results))
+
+        if len(all_results) == 0:
+            print("None")
+        else:
+            print(all_results)
+            for terms in all_results:
+                print(terms.name)
+            # for terms in all_results:
+            #     print(terms.name)
+            #     for tls in terms.tl:
+            #         print(tls.definition)
+            #         print(tls.src)
+            #         try:
+            #             print(tls.src[0])
+            #         except TypeError:
+            #             pass
+
 def search_one(search_term):
     with Session(engine) as session:
         statement = select(Terms).where(Terms.name == search_term)
@@ -89,10 +114,11 @@ create_db_and_tables()
 # search_one("仕方")
 
 print("Search all")
-# search("仕方がない")
-# search("あ",10,3)
 print(get_term_count())
 print(get_def_count())
+search_main("仕方がない")
+# search("仕方がない")
+# search("あ",10,3)
 
 
 # print("Search TL")
