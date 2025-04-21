@@ -138,26 +138,35 @@ engine = models.create_engine(url)
 def create_db_and_tables():
     models.SQLModel.metadata.create_all(engine)
 
-def search(search_term, offset=0, limit=10):
+async def search(search_term, offset=0, limit=10):
+    matches = {}
     with Session(engine) as session:
         # Search LIKE
-        statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
+        statement = select(models.Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
         results = session.exec(statement)
         all_results = results.all()
-        print(len(all_results))
+        # length = len(all_results)
 
         if len(all_results) == 0:
-            print("None")
+            print("No results")
         else:
-            for terms in all_results:
-                print(terms.name)
-                for tls in terms.tl:
-                    print(tls.definition)
-                    print(tls.src)
-                    try:
-                        print(tls.src[0])
-                    except TypeError:
-                        pass
+            return all_results
+    ## TODOs return as python dict
+
+def get_term_count():
+    with Session(engine) as session:
+        statement = select(models.Terms)
+        rows = session.exec(statement)
+        return(len(rows.all()))
+
+def get_def_count():
+    defs = 0
+    with Session(engine) as session:
+        statement = select(models.Terms)
+        result = session.exec(statement).all()
+        for terms in result:
+            defs += len(terms.tl)
+        return defs
 
 create_db_and_tables()
 
@@ -187,19 +196,17 @@ async def root_page(request: Request):
 
 @app.get("/search/{term_id}", response_class=HTMLResponse)
 async def search(request: Request, term_id: str):
-    terms = []
-    length = 0
-    defcount = 0
+    length = get_term_count()
+    defcount = get_def_count()
+
     if term_id == "":
         return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     else:
         search_term = term_id if not is_katakana(term_id) else to_hiragana(term_id)
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        terms = await term_search(data, search_term)
+
+    terms = await search(search_term)
+    print(length, defcount)
+
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
     )
