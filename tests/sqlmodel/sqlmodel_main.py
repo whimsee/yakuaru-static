@@ -47,7 +47,7 @@ def search(search_term, offset=0, limit=10):
             #             pass
 
 def search_main(search_term, offset=0, limit=10):
-    matches = {}
+    matches = []
     with Session(engine) as session:
         # Search LIKE
         statement = select(Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
@@ -58,13 +58,19 @@ def search_main(search_term, offset=0, limit=10):
         if len(all_results) == 0:
             print("None")
         else:
-            # print(all_results)
             for terms in all_results:
-                # print(terms.name)
-                print("----TERMS----")
-                print(terms)
-                print("----TL----")
-                print(terms.tl)
+                results_as_dict = dict(terms)
+                print(results_as_dict)
+                print(results_as_dict['name'])
+                matches.append(results_as_dict)
+            # print(matches)
+            # print(all_results)
+            # for terms in all_results:
+            #     # print(terms.name)
+            #     print("----TERMS----")
+            #     print(terms)
+            #     print("----TL----")
+            #     print(terms.tl)
             # for terms in all_results:
             #     print(terms.name)
             #     for tls in terms.tl:
@@ -95,7 +101,9 @@ def search_TL(search_term):
             # print(one_result)
             # # print(one_result.name)
             results = session.exec(statement).one()
-            print(results)
+            result_as_dict = dict(results)
+            # print(result_as_dict)
+            return result_as_dict
         except NoResultFound:
             print("No result")
         
@@ -182,7 +190,7 @@ print("SQL")
 # search_main("大サビ")
 search_main("仕方がない")
 # print("Search TL - bridge")
-# search_TL(1077)
+search_TL(1077)
 
 search_term = "大サビ"
 print("JSON")
