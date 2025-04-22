@@ -16,6 +16,7 @@ class Terms(SQLModel, table=True):
     hepburn: str | None = Field(default=None, index=True)
     kunrei: str | None = Field(default=None, index=True)
     nihon: str | None = Field(default=None, index=True)
+    kanaoverride: str | None = Field(default=None, index=True)
     furigana: str | None = None
     # altsearch: str | None = Field(default=None, index=True)
 

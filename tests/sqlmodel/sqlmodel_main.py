@@ -1,6 +1,9 @@
 from models import *
 from sqlmodel import Session, select, col, func
 from sqlalchemy.orm.exc import NoResultFound
+import json
+import re
+import string
 
 from secrets import secrets
 
@@ -108,6 +111,57 @@ def get_def_count():
             defs += len(terms.tl)
         return defs
 
+def term_search(data, search_term:str, letters=False):
+    found_list = []
+    matches = []
+    found = False
+
+    pattern = re.compile(search_term, flags=re.IGNORECASE)
+
+    if not letters:
+        for term,value in data.items():
+
+            if pattern.search(term):
+                # print(value['altsearch'], "\n")
+                found_list.append(value)
+                found = True
+                # print("FOUND")
+            
+            if not found:
+                if pattern.search(value['altsearch']):
+                    # print("ALTFOUND")
+                    found_list.append(value)
+                    found = True
+
+        if found:
+            for item in found_list:
+                if pattern.fullmatch(item['term']):
+                    # print("MATCH")
+                    matches.append(item)
+                elif pattern.match(item['term']):
+                    # print("SECONDARY MATCH")
+                    # print(item)
+                    matches.append(item)
+
+            found_list.sort(key=len)
+            for item in found_list:
+                if item not in matches:
+                    # print("NOT FOUND")
+                    matches.append(item)
+        else:
+            return None
+    else:
+        for term,value in data.items():
+
+            if pattern.match(value['romakana']):
+                # print("MATCH")
+                # print(term)
+                matches.append(value)
+    
+        matches.sort(key=lambda k: k['term'])
+
+    return matches
+
 create_db_and_tables()
 # print("Search One")
 # search_one("たしか")
@@ -117,6 +171,14 @@ print("Search all")
 print(get_term_count())
 print(get_def_count())
 search_main("仕方がない")
+search_main("大サビ")
+
+search_term = "大サビ"
+with open("glossaryMaster.json", "r", encoding="utf8") as file:
+    data = json.load(file)
+    length = int(len(data))
+    terms = term_search(data, search_term)
+    print(terms)
 # search("仕方がない")
 # search("あ",10,3)
 

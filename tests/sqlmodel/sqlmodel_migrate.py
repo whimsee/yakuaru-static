@@ -57,6 +57,7 @@ if __name__ == "__main__":
             kunrei = get_item(data, items, "kunrei")
             nihon = get_item(data, items, "nihon")
             furigana = get_item(data, items, "furigana")
+            kanaoverride = get_item(data, items, "kanaOverride")
             # altsearch = get_item(data, items, "altsearch")
 
             tl = get_item(data, items, "tl")
@@ -133,6 +134,7 @@ if __name__ == "__main__":
                 kunrei=kunrei,
                 nihon=nihon,
                 furigana=furigana,
+                kanaoverride=kanaoverride,
                 # altsearch=altsearch,
                 tl=TL_TERMS
             )
