@@ -58,9 +58,13 @@ def search_main(search_term, offset=0, limit=10):
         if len(all_results) == 0:
             print("None")
         else:
-            print(all_results)
+            # print(all_results)
             for terms in all_results:
-                print(terms.name)
+                # print(terms.name)
+                print("----TERMS----")
+                print(terms)
+                print("----TL----")
+                print(terms.tl)
             # for terms in all_results:
             #     print(terms.name)
             #     for tls in terms.tl:
@@ -84,12 +88,14 @@ def search_one(search_term):
 
 def search_TL(search_term):
     with Session(engine) as session:
-        statement = select(TL).where(col(TL.definition).contains(search_term))
+        statement = select(TL).where(TL.id==search_term)
         try:
-            one_result = session.exec(statement).one()
-            print(one_result is None)
-            print(one_result)
-            # print(one_result.name)
+            # one_result = session.exec(statement).one()
+            # print(one_result is None)
+            # print(one_result)
+            # # print(one_result.name)
+            results = session.exec(statement).one()
+            print(results)
         except NoResultFound:
             print("No result")
         
@@ -167,13 +173,19 @@ create_db_and_tables()
 # search_one("たしか")
 # search_one("仕方")
 
-print("Search all")
-print(get_term_count())
-print(get_def_count())
+# print("Search all")
+# print(get_term_count())
+# print(get_def_count())
+# search_main("仕方がない")
+
+print("SQL")
+# search_main("大サビ")
 search_main("仕方がない")
-search_main("大サビ")
+# print("Search TL - bridge")
+# search_TL(1077)
 
 search_term = "大サビ"
+print("JSON")
 with open("glossaryMaster.json", "r", encoding="utf8") as file:
     data = json.load(file)
     length = int(len(data))
@@ -183,5 +195,3 @@ with open("glossaryMaster.json", "r", encoding="utf8") as file:
 # search("あ",10,3)
 
 
-# print("Search TL")
-# search_TL("cannot")
