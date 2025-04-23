@@ -19,7 +19,7 @@ class Terms(SQLModel, table=True):
     nihon: str | None = Field(default=None, index=True)
     kanaoverride: str | None = Field(default=None, index=True)
     furigana: str | None = None
-    # altsearch: str | None = Field(default=None, index=True)
+    altsearch: str | None = Field(default=None, index=True)
 
     tl: None | list["TL"] = Relationship(back_populates="terms", cascade_delete=True)
 

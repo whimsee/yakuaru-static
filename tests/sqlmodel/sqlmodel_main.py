@@ -57,40 +57,27 @@ def search_main(search_term, offset=0, limit=10):
 
         if len(all_results) == 0:
             print("None")
+            return
         else:
             for terms in all_results:
                 terms_tl = []
                 results_as_dict = dict(terms)
-                print(results_as_dict['name'])
+                # print(results_as_dict['name'])
                 # print(terms)
                 # print(results_as_dict)
-                print(terms.tl)
-                print("------TL------")
+                # print(terms.tl)
+                # print("------TL------")
                 for items in terms.tl:
                     tl = dict(items)
                     # print(items.credit)
                     terms_tl.append(tl)
                 results_as_dict |= {"tl" : terms_tl}
                 matches.append(results_as_dict)
-                print("=====RESULT=====")
+                # print("=====RESULT=====")
                 # print(terms_tl)
             print(matches)
-            # print(all_results)
-            # for terms in all_results:
-            #     # print(terms.name)
-            #     print("----TERMS----")
-            #     print(terms)
-            #     print("----TL----")
-            #     print(terms.tl)
-            # for terms in all_results:
-            #     print(terms.name)
-            #     for tls in terms.tl:
-            #         print(tls.definition)
-            #         print(tls.src)
-            #         try:
-            #             print(tls.src[0])
-            #         except TypeError:
-            #             pass
+            return matches
+
 
 def search_one(search_term):
     with Session(engine) as session:
@@ -198,12 +185,14 @@ create_db_and_tables()
 # search_main("仕方がない")
 
 print("SQL")
-search_main("大サビ")
-# search_main("仕方がない")
+# search_main("大サビ")
+search_sql = search_main("仕方がない")
+print(search_sql)
 # print("Search TL - bridge")
 # search_TL(1077)
 
-search_term = "大サビ"
+# search_term = "大サビ"
+search_term = "仕方がない"
 print("JSON")
 with open("glossaryMaster.json", "r", encoding="utf8") as file:
     data = json.load(file)

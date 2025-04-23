@@ -3,6 +3,7 @@ from sqlmodel import Session, select, col
 
 import json
 import re
+import string
 
 from secrets import secrets
 
@@ -23,6 +24,8 @@ url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets['USER'], secrets
 engine = create_engine(url)
 POSTGRES = True
 
+def strip_punc_and_space(text):
+    return ''.join(word.strip(string.punctuation) for word in text.split())
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
@@ -58,7 +61,7 @@ if __name__ == "__main__":
             nihon = get_item(data, items, "nihon")
             furigana = get_item(data, items, "furigana")
             kanaoverride = get_item(data, items, "kanaOverride")
-            # altsearch = get_item(data, items, "altsearch")
+            altsearch = ""
 
             tl = get_item(data, items, "tl")
 
@@ -75,6 +78,12 @@ if __name__ == "__main__":
                 ensam = get_tl(defs, "ensam")
                 # credit_temp = get_tl(defs, "credit")
                 credit = get_tl(defs, "credit")
+
+                ### Create altsearch
+                altsearch += strip_punc_and_space(definition)
+
+                if defexp != None:
+                    altsearch += strip_punc_and_space(defexp)
 
                 ### Prep source. convert list to string with separator
                 if source_temp != None:
@@ -136,7 +145,7 @@ if __name__ == "__main__":
                 nihon=nihon,
                 furigana=furigana,
                 kanaoverride=kanaoverride,
-                # altsearch=altsearch,
+                altsearch=altsearch,
                 tl=TL_TERMS
             )
 
