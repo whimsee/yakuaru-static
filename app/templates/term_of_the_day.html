@@ -87,19 +87,19 @@
 								<section id="glossary-wrapper" class="main">
 									<div class="term">
 										<div class="headerdiv">
-											<a href={{"/search/" ~ term.term|e }} target="_blank" class="linkToTerm"><img src="/media/link.png" title="Link to 仕方がない"></a>
-											<a href={{"https://jisho.org/search/" ~ term.term|e }} target="_blank" title="Search Jisho" class="exlink">J</a>
-											<a href={{"https://eow.alc.co.jp/search?q=" ~ term.term|e }} target="_blank" title="Search ALC" class="exlink">A</a>
-											<a href={{"https://dictionary.goo.ne.jp/srch/all/" ~ term.term|e ~ "/m0u/"}} target="_blank" title="Search Goo Jisho" class="exlink">G</a>
-											<a href={{"https://kotobank.jp/gs/?q=" ~ term.term|e }} target="_blank" title="Search Kotobank" class="exlink">K</a>
-											<a href={{"https://www.weblio.jp/content/" ~ term.term|e }} target="_blank" title="Search Weblio" class="exlink">W</a>
+											<a href={{"/search/" ~ term.name|e }} target="_blank" class="linkToTerm"><img src="/media/link.png" title="Link to 仕方がない"></a>
+											<a href={{"https://jisho.org/search/" ~ term.name|e }} target="_blank" title="Search Jisho" class="exlink">J</a>
+											<a href={{"https://eow.alc.co.jp/search?q=" ~ term.name|e }} target="_blank" title="Search ALC" class="exlink">A</a>
+											<a href={{"https://dictionary.goo.ne.jp/srch/all/" ~ term.name|e ~ "/m0u/"}} target="_blank" title="Search Goo Jisho" class="exlink">G</a>
+											<a href={{"https://kotobank.jp/gs/?q=" ~ term.name|e }} target="_blank" title="Search Kotobank" class="exlink">K</a>
+											<a href={{"https://www.weblio.jp/content/" ~ term.name|e }} target="_blank" title="Search Weblio" class="exlink">W</a>
 											{% if term.kanaOverride %}
-												<div class="name">{{ term.term }} [{{ term.kanaOverride }}]</div>
+												<div class="name">{{ term.name }} [{{ term.kanaOverride }}]</div>
 											{% else %}
 												{% if term.furigana %}
-													<div class="name">{{ term.term }} [{{ term.furigana }}]</div>
+													<div class="name">{{ term.name }} [{{ term.furigana }}]</div>
 												{% else %}
-													<div class="name">{{ term.term }}</div>
+													<div class="name">{{ term.name }}</div>
 												{% endif %}
 											{% endif %}
 											<div class="romajiName">H: {{ term.hepburn|e }} | 
@@ -120,7 +120,7 @@
 												{% else %}
 												<div class="def-content">
 												{% endif %}
-													<div class="def">{{loop.index ~ ". " ~ x.def|e }}</div>
+													<div class="def">{{loop.index ~ ". " ~ x.definition|e }}</div>
 													{% if x['defexp'] %}
 														{% if not x['jpsam'] and not x['ensam'] and not x['img'] %}
 															<div class="defexp onlyexp">{{ x.defexp|e }}</div>
@@ -137,7 +137,7 @@
 													{% if x['img'] %}
 														<div class="media-container">
 															<figure>
-																<img src="{{'/media/' ~ term.term ~ '.' ~ x['img'][0] }}">
+																<img src="{{'/media/' ~ term.name ~ '.' ~ x['img'][0] }}">
 																<figcaption>{{ x['img'][1] }}</figcaption>
 															</figure>
 														</div>

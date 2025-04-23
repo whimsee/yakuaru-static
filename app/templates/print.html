@@ -21,12 +21,12 @@
             <div class="term">
                 <div class="headerdiv">
                     {% if term.kanaOverride %}
-                        <div class="name">{{ term.term }} [{{ term.kanaOverride }}]</div>
+                        <div class="name">{{ term.name }} [{{ term.kanaOverride }}]</div>
                     {% else %}
                         {% if term.furigana %}
-                            <div class="name">{{ term.term }} [{{ term.furigana }}]</div>
+                            <div class="name">{{ term.name }} [{{ term.furigana }}]</div>
                         {% else %}
-                            <div class="name">{{ term.term }}</div>
+                            <div class="name">{{ term.name }}</div>
                         {% endif %}
                     {% endif %}
                     <div class="romajiName">H: {{ term.hepburn|e }} | 
@@ -47,7 +47,7 @@
                         {% else %}
                         <div class="def-content">
                         {% endif %}
-                            <div class="def">{{loop.index ~ ". " ~ x.def|e }}</div>
+                            <div class="def">{{loop.index ~ ". " ~ x.definition|e }}</div>
                             {% if x['defexp'] %}
                                 {% if not x['jpsam'] and not x['ensam'] %}
                                     <div class="defexp onlyexp">{{ x.defexp|e }}</div>

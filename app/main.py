@@ -19,6 +19,7 @@ from . import models
 
 from sqlmodel import Session, select, col
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.sql import func
 
 from . import secrets
 
@@ -29,42 +30,6 @@ def strip_punc(text):
 
 def strip_punc_and_space(text):
     return ''.join(word.strip(string.punctuation) for word in text.split())
-
-# def letter_sub(letter):
-#     if letter == "~":
-#         return r"[~]"
-#     elif letter == "あ":
-#         return r"\b[あいうえお]"
-#     elif letter == "か":
-#         return r"\b[かきくけこ]"
-#     elif letter == "が":
-#         return r"\b[がぎぐげご]"
-#     elif letter == "さ":
-#         return r"\b[さしすせそ]"
-#     elif letter == "ざ":
-#         return r"\b[さじぢずぜぞ]"
-#     elif letter == "た":
-#         return r"\b[たつてと]"
-#     elif letter == "だ":
-#         return r"\b[だぢづでど]"
-#     elif letter == "な":
-#         return r"\b[なにぬねの]"
-#     elif letter == "は":
-#         return r"\b[はひふへほ]"
-#     elif letter == "ば":
-#         return r"\b[ばびぶべぼ]"
-#     elif letter == "ぱ":
-#         return r"\b[ぱぴぷぺぽ]"
-#     elif letter == "ま":
-#         return r"\b[まみむめも]"
-#     elif letter == "や":
-#         return r"\b[やゆよ]"
-#     elif letter == "ら":
-#         return r"\b[らりるれろ]"
-#     elif letter == "わ":
-#         return r"\b[わ]"
-#     else:
-#         return
 
 def letter_sub(letter):
     if letter == "~":
@@ -102,56 +67,6 @@ def letter_sub(letter):
     else:
         return
 
-async def term_search(data, search_term:str, letters=False):
-    found_list = []
-    matches = []
-    found = False
-
-    pattern = re.compile(search_term, flags=re.IGNORECASE)
-
-    if not letters:
-        for term,value in data.items():
-
-            if pattern.search(term):
-                # print(value['altsearch'], "\n")
-                found_list.append(value)
-                found = True
-                # print("FOUND")
-            
-            if not found:
-                if pattern.search(value['altsearch']):
-                    # print("ALTFOUND")
-                    found_list.append(value)
-                    found = True
-
-        if found:
-            for item in found_list:
-                if pattern.fullmatch(item['term']):
-                    # print("MATCH")
-                    matches.append(item)
-                elif pattern.match(item['term']):
-                    # print("SECONDARY MATCH")
-                    # print(item)
-                    matches.append(item)
-
-            found_list.sort(key=len)
-            for item in found_list:
-                if item not in matches:
-                    # print("NOT FOUND")
-                    matches.append(item)
-        else:
-            return None
-    else:
-        for term,value in data.items():
-
-            if pattern.match(value['romakana']):
-                # print("MATCH")
-                # print(term)
-                matches.append(value)
-    
-        matches.sort(key=lambda k: k['term'])
-
-    return matches
 
 app = FastAPI()
 
@@ -219,21 +134,29 @@ async def http_exception_handler(request, exc):
 
 @app.get("/", response_class=HTMLResponse)
 async def root_page(request: Request):
+    match = {}
     time = datetime.now()
-    defcount = 0
-    length = 0
+    length = get_term_count()
+    defcount = get_def_count()
     date = time.strftime("%B %d, %Y")
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        random.seed(int(time.day) * int(time.month) * int(time.year) * length)
-        rand = round(random.random() * length)
-        term_index = list(data)[rand]
-        term = data[term_index]
+    random.seed(int(time.day) * int(time.month) * int(time.year) * length)
+    rand = round(random.random() * length)
+
+    with Session(engine) as session:
+        statement = select(models.Terms).where(models.Terms.id == rand)
+        results = session.exec(statement)
+
+        all_results = results.one()
+        terms_tl = []
+        results_as_dict = dict(all_results)
+        for items in all_results.tl:
+            tl = dict(items)
+            terms_tl.append(tl)
+            results_as_dict |= {"tl" : terms_tl}
+        match = results_as_dict
+
     return templates.TemplateResponse(
-        request=request, name="term_of_the_day.html", context={"date" : date, "term" : term, "length" : length, "defcount" : defcount}
+        request=request, name="term_of_the_day.html", context={"date" : date, "term" : match, "length" : length, "defcount" : defcount}
     )
 
 
@@ -327,40 +250,58 @@ async def search(request: Request, term_id: str):
 
 @app.get("/random", response_class=HTMLResponse)
 async def search(request: Request):
-    terms = []
-    length = 0
-    defcount = 0
-    iterations = 0
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        for term in data.values():
-            if iterations == 20:
-                break
-            else:
-                terms.append(term)
-                iterations += 1
-        random.shuffle(terms)
+    matches = []
+    length = get_term_count()
+    defcount = get_def_count()
+
+    with Session(engine) as session:
+        statement = select(models.Terms).order_by(func.random()).limit(20)
+        results = session.exec(statement)
+
+        all_results = results.all()
+        for terms in all_results:
+            terms_tl = []
+            results_as_dict = dict(terms)
+            for items in terms.tl:
+                tl = dict(items)
+                terms_tl.append(tl)
+            results_as_dict |= {"tl" : terms_tl}
+            matches.append(results_as_dict)
+
     return templates.TemplateResponse(
-        request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
+        request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):
-    terms = []
-    length = 0
-    defcount = 0
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        terms = await term_search(data, "[1234567890]")
+    length = get_term_count()
+    defcount = get_def_count()
+
+    search_string = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+    matches = []
+    for number in search_string:
+        # print(letters)
+        with Session(engine) as session:
+            # Search LIKE
+            statement = select(models.Terms).where(col(models.Terms.romakana).istartswith(number))
+            results = session.exec(statement)
+
+            all_results = results.all()
+            for terms in all_results:
+                terms_tl = []
+                results_as_dict = dict(terms)
+                for items in terms.tl:
+                    tl = dict(items)
+                    terms_tl.append(tl)
+                results_as_dict |= {"tl" : terms_tl}
+                matches.append(results_as_dict)
+    
+    matches.sort(key=lambda k: k['romakana'])
     return templates.TemplateResponse(
-        request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
+        request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
+    
 
 @app.get("/l/{letter}", response_class=HTMLResponse)
 async def search(request: Request, letter: str):
@@ -389,51 +330,53 @@ async def search(request: Request, letter: str):
                 matches.append(results_as_dict)
     
     matches.sort(key=lambda k: k['romakana'])
-    # terms = []
-    # length = 0
-    # defcount = 0
-    # with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-    #     data = json.load(file)
-    #     length = int(len(data))
-    #     for x in data.keys():
-    #         defcount += len(data[x]['tl'])
-    #     terms = await term_search(data, search_string, True)
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
 
 @app.get("/new", response_class=HTMLResponse)
 async def search(request: Request):
-    terms = []
-    length = 0
-    defcount = 0
-    iterations = 0
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        for term in reversed(data.values()):
-            if iterations == 20:
-                break
-            else:
-                terms.append(term)
-                iterations += 1
+    matches = []
+    length = get_term_count()
+    defcount = get_def_count()
+
+    with Session(engine) as session:
+        statement = select(models.Terms).order_by(models.Terms.id.desc()).limit(30)
+        results = session.exec(statement)
+
+        all_results = results.all()
+        for terms in all_results:
+            terms_tl = []
+            results_as_dict = dict(terms)
+            for items in terms.tl:
+                tl = dict(items)
+                terms_tl.append(tl)
+            results_as_dict |= {"tl" : terms_tl}
+            matches.append(results_as_dict)
+
     return templates.TemplateResponse(
-        request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
+        request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
 
 @app.get("/print", response_class=HTMLResponse)
 async def search(request: Request):
-    terms = []
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for term in reversed(data.values()):
-            terms.append(term)
-        terms.sort(key=lambda k: k['term'])
+    matches = []
+
+    with Session(engine) as session:
+        statement = select(models.Terms).order_by(models.Terms.romakana)
+        results = session.exec(statement)
+
+        all_results = results.all()
+        for terms in all_results:
+            terms_tl = []
+            results_as_dict = dict(terms)
+            for items in terms.tl:
+                tl = dict(items)
+                terms_tl.append(tl)
+            results_as_dict |= {"tl" : terms_tl}
+            matches.append(results_as_dict)
     return templates.TemplateResponse(
-        request=request, name="print.html", context={"terms" : terms}
+        request=request, name="print.html", context={"terms" : matches}
     )
 
 
