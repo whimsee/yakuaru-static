@@ -135,23 +135,30 @@ templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 url = "postgresql+psycopg://{}:{}@{}:{}/test_db".format(secrets.secrets['USER'], secrets.secrets['PASS'], secrets.secrets['IP_ADDRESS'], secrets.secrets['PORT'])
 engine = models.create_engine(url)
 
+
 def create_db_and_tables():
     models.SQLModel.metadata.create_all(engine)
 
 async def search(search_term, offset=0, limit=10):
-    matches = {}
+    matches = []
     with Session(engine) as session:
         # Search LIKE
-        statement = select(models.Terms).where(col(Terms.name).contains(search_term)).offset(offset).limit(limit)
+        statement = select(models.Terms).where(col(models.Terms.name).contains(search_term)).offset(offset).limit(limit)
         results = session.exec(statement)
         all_results = results.all()
-        # length = len(all_results)
 
         if len(all_results) == 0:
-            print("No results")
+            return None
         else:
-            return all_results
-    ## TODOs return as python dict
+            for terms in all_results:
+                terms_tl = []
+                results_as_dict = dict(terms)
+                for items in terms.tl:
+                    tl = dict(items)
+                    terms_tl.append(tl)
+                results_as_dict |= {"tl" : terms_tl}
+                matches.append(results_as_dict)
+            return matches
 
 def get_term_count():
     with Session(engine) as session:
@@ -204,11 +211,32 @@ async def search(request: Request, term_id: str):
     else:
         search_term = term_id if not is_katakana(term_id) else to_hiragana(term_id)
 
-    terms = await search(search_term)
-    print(length, defcount)
+    print("START")
+    matches = []
+    with Session(engine) as session:
+        # Search LIKE
+        statement = select(models.Terms).where(col(models.Terms.name).contains(search_term)).offset(0).limit(10)
+        results = session.exec(statement)
+        all_results = results.all()
+
+        if len(all_results) == 0:
+            print("NONE")
+        else:
+            for terms in all_results:
+                terms_tl = []
+                results_as_dict = dict(terms)
+                for items in terms.tl:
+                    tl = dict(items)
+                    terms_tl.append(tl)
+                results_as_dict |= {"tl" : terms_tl}
+                matches.append(results_as_dict)
+    # print(length, defcount)
+    # terms = await search(search_term)
+    print(matches)
+    # print(length, defcount)
 
     return templates.TemplateResponse(
-        request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
+        request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
 
 @app.get("/random", response_class=HTMLResponse)
