@@ -211,29 +211,79 @@ async def search(request: Request, term_id: str):
     else:
         search_term = term_id if not is_katakana(term_id) else to_hiragana(term_id)
 
-    print("START")
     matches = []
+    found = False
     with Session(engine) as session:
         # Search LIKE
         statement = select(models.Terms).where(col(models.Terms.name).contains(search_term)).offset(0).limit(10)
         results = session.exec(statement)
-        all_results = results.all()
+        temp_results = results.all()
+        if len(temp_results) > 0:
+            found = True
 
-        if len(all_results) == 0:
-            print("NONE")
-        else:
-            for terms in all_results:
-                terms_tl = []
-                results_as_dict = dict(terms)
-                for items in terms.tl:
-                    tl = dict(items)
-                    terms_tl.append(tl)
-                results_as_dict |= {"tl" : terms_tl}
-                matches.append(results_as_dict)
-    # print(length, defcount)
-    # terms = await search(search_term)
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.romakana).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                found = True
+        
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.hepburn).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                found = True
+        
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.kunrei).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                print("FOUND")
+                found = True
+
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.nihon).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                found = True
+        
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.hepburn).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            print(len(temp_results))
+            if len(temp_results) > 0:
+                found = True
+        
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.lit).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                found = True
+        
+        if not found:
+            statement = select(models.Terms).where(col(models.Terms.altsearch).contains(search_term)).offset(0).limit(10)
+            results = session.exec(statement)
+            temp_results = results.all()
+            if len(temp_results) > 0:
+                found = True
+        
+        all_results = temp_results
+        for terms in all_results:
+            terms_tl = []
+            results_as_dict = dict(terms)
+            for items in terms.tl:
+                tl = dict(items)
+                terms_tl.append(tl)
+            results_as_dict |= {"tl" : terms_tl}
+            matches.append(results_as_dict)
+            matches.sort(key=lambda k: k['name'])
+            
     print(matches)
-    # print(length, defcount)
 
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
