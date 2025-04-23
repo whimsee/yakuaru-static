@@ -30,39 +30,75 @@ def strip_punc(text):
 def strip_punc_and_space(text):
     return ''.join(word.strip(string.punctuation) for word in text.split())
 
+# def letter_sub(letter):
+#     if letter == "~":
+#         return r"[~]"
+#     elif letter == "あ":
+#         return r"\b[あいうえお]"
+#     elif letter == "か":
+#         return r"\b[かきくけこ]"
+#     elif letter == "が":
+#         return r"\b[がぎぐげご]"
+#     elif letter == "さ":
+#         return r"\b[さしすせそ]"
+#     elif letter == "ざ":
+#         return r"\b[さじぢずぜぞ]"
+#     elif letter == "た":
+#         return r"\b[たつてと]"
+#     elif letter == "だ":
+#         return r"\b[だぢづでど]"
+#     elif letter == "な":
+#         return r"\b[なにぬねの]"
+#     elif letter == "は":
+#         return r"\b[はひふへほ]"
+#     elif letter == "ば":
+#         return r"\b[ばびぶべぼ]"
+#     elif letter == "ぱ":
+#         return r"\b[ぱぴぷぺぽ]"
+#     elif letter == "ま":
+#         return r"\b[まみむめも]"
+#     elif letter == "や":
+#         return r"\b[やゆよ]"
+#     elif letter == "ら":
+#         return r"\b[らりるれろ]"
+#     elif letter == "わ":
+#         return r"\b[わ]"
+#     else:
+#         return
+
 def letter_sub(letter):
     if letter == "~":
-        return r"[~]"
+        return ["~"]
     elif letter == "あ":
-        return r"\b[あいうえお]"
+        return ["あ", "い", "う", "え", "お"]    
     elif letter == "か":
-        return r"\b[かきくけこ]"
+        return ["か", "き", "く", "け", "こ"]  
     elif letter == "が":
-        return r"\b[がぎぐげご]"
+        return ["が", "ぎ", "ぐ", "げ", "ご"]  
     elif letter == "さ":
-        return r"\b[さしすせそ]"
+        return ["さ", "し", "す", "せ", "そ"]  
     elif letter == "ざ":
-        return r"\b[さじぢずぜぞ]"
+        return ["さ", "じ", "ぢ", "ず", "ぜ", "ぞ"]  
     elif letter == "た":
-        return r"\b[たつてと]"
+        return ["た", "つ", "て", "と"]  
     elif letter == "だ":
-        return r"\b[だぢづでど]"
+        return ["だ", "ぢ", "づ", "で", "ど"]  
     elif letter == "な":
-        return r"\b[なにぬねの]"
+        return ["な", "に", "ぬ", "ね", "の"]  
     elif letter == "は":
-        return r"\b[はひふへほ]"
+        return ["は", "ひ", "ふ", "へ", "ほ"]  
     elif letter == "ば":
-        return r"\b[ばびぶべぼ]"
+        return ["ば", "び", "ぶ", "べ", "ぼ"] 
     elif letter == "ぱ":
-        return r"\b[ぱぴぷぺぽ]"
+        return ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"]  
     elif letter == "ま":
-        return r"\b[まみむめも]"
+        return ["ま", "み", "む", "め", "も"]  
     elif letter == "や":
-        return r"\b[やゆよ]"
+        return ["や", "ゆ", "よ"]  
     elif letter == "ら":
-        return r"\b[らりるれろ]"
+        return ["ら", "り", "る", "れ", "ろ"]  
     elif letter == "わ":
-        return r"\b[わ]"
+        return ["わ"]
     else:
         return
 
@@ -283,7 +319,7 @@ async def search(request: Request, term_id: str):
             matches.append(results_as_dict)
             matches.sort(key=lambda k: k['name'])
             
-    print(matches)
+    # print(matches)
 
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
@@ -328,20 +364,42 @@ async def search(request: Request):
 
 @app.get("/l/{letter}", response_class=HTMLResponse)
 async def search(request: Request, letter: str):
+    length = get_term_count()
+    defcount = get_def_count()
     search_string = letter_sub(letter)
     if not search_string:
         return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
-    terms = []
-    length = 0
-    defcount = 0
-    with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
-        data = json.load(file)
-        length = int(len(data))
-        for x in data.keys():
-            defcount += len(data[x]['tl'])
-        terms = await term_search(data, search_string, True)
+    
+    matches = []
+    for letters in search_string:
+        # print(letters)
+        with Session(engine) as session:
+            # Search LIKE
+            statement = select(models.Terms).where(col(models.Terms.romakana).istartswith(letters))
+            results = session.exec(statement)
+
+            all_results = results.all()
+            for terms in all_results:
+                terms_tl = []
+                results_as_dict = dict(terms)
+                for items in terms.tl:
+                    tl = dict(items)
+                    terms_tl.append(tl)
+                results_as_dict |= {"tl" : terms_tl}
+                matches.append(results_as_dict)
+    
+    matches.sort(key=lambda k: k['romakana'])
+    # terms = []
+    # length = 0
+    # defcount = 0
+    # with open(str(BASE_PATH /"json/glossaryMaster.json"), "r", encoding="utf8") as file:
+    #     data = json.load(file)
+    #     length = int(len(data))
+    #     for x in data.keys():
+    #         defcount += len(data[x]['tl'])
+    #     terms = await term_search(data, search_string, True)
     return templates.TemplateResponse(
-        request=request, name="search.html", context={"terms" : terms, "length" : length, "defcount" : defcount}
+        request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
 
 @app.get("/new", response_class=HTMLResponse)
