@@ -73,8 +73,9 @@ if __name__ == "__main__":
                 source_temp = get_tl(defs, "src")
                 jpsam = get_tl(defs, "jpsam")
                 ensam = get_tl(defs, "ensam")
-                credit_temp = get_tl(defs, "credit")
-            
+                # credit_temp = get_tl(defs, "credit")
+                credit = get_tl(defs, "credit")
+
                 ### Prep source. convert list to string with separator
                 if source_temp != None:
                     if POSTGRES:
@@ -87,15 +88,15 @@ if __name__ == "__main__":
                     source = None
 
                 ### Prep credit. convert list to string with separator
-                if credit_temp != None:
-                    if POSTGRES:
-                        credit = credit_temp
-                    elif POSTGRES == False and isinstance(credit_temp, list):
-                        credit = "^*".join(str(x) for x in credit_temp)
-                    else:
-                        credit = credit_temp
-                else:
-                    credit = None
+                # if credit_temp != None:
+                #     if POSTGRES:
+                #         credit = credit_temp
+                #     elif POSTGRES == False and isinstance(credit_temp, list):
+                #         credit = "^*".join(str(x) for x in credit_temp)
+                #     else:
+                #         credit = credit_temp
+                # else:
+                #     credit = None
 
 
                 ### each img

@@ -59,11 +59,22 @@ def search_main(search_term, offset=0, limit=10):
             print("None")
         else:
             for terms in all_results:
+                terms_tl = []
                 results_as_dict = dict(terms)
-                print(results_as_dict)
                 print(results_as_dict['name'])
+                # print(terms)
+                # print(results_as_dict)
+                print(terms.tl)
+                print("------TL------")
+                for items in terms.tl:
+                    tl = dict(items)
+                    # print(items.credit)
+                    terms_tl.append(tl)
+                results_as_dict |= {"tl" : terms_tl}
                 matches.append(results_as_dict)
-            # print(matches)
+                print("=====RESULT=====")
+                # print(terms_tl)
+            print(matches)
             # print(all_results)
             # for terms in all_results:
             #     # print(terms.name)
@@ -187,10 +198,10 @@ create_db_and_tables()
 # search_main("仕方がない")
 
 print("SQL")
-# search_main("大サビ")
-search_main("仕方がない")
+search_main("大サビ")
+# search_main("仕方がない")
 # print("Search TL - bridge")
-search_TL(1077)
+# search_TL(1077)
 
 search_term = "大サビ"
 print("JSON")

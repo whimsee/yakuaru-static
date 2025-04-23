@@ -10,7 +10,8 @@ import sqlalchemy
 class Terms(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field(index=True)
-    altterm: str | None = Field(index=True)
+    # altterm: str | None = Field(index=True)
+    altterm: str | None = Field(default=None, sa_column=Column(ARRAY(String)))
     romakana: str = Field(index=True)
     lit: str | None = None
     hepburn: str | None = Field(default=None, index=True)
@@ -27,7 +28,8 @@ class TL(SQLModel, table=True):
     definition: str = Field(index=True)
     defexp: str | None = None
     src: str | None = Field(default=None, sa_column=Column(ARRAY(String)))
-    credit: str | None = Field(default=None, sa_column=Column(ARRAY(String)))
+    # credit: str | None = Field(default=None, sa_column=Column(ARRAY(String)))
+    credit: str | None = None
     jpsam: str | None = Field(default=None, index=True)
     ensam: str | None = Field(default=None, index=True)
     image_format: str | None = None
