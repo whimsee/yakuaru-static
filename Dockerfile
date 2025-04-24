@@ -11,6 +11,7 @@ COPY ./requirements.txt /code/requirements.txt
 # 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN python -m unidic download
 
 # 
 COPY ./app /code/app

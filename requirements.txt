@@ -6,3 +6,6 @@ fastapi-htmx==0.5.0
 wanakana-python==1.2.2
 sqlmodel==0.0.24
 psycopg[binary,pool]==3.2.6
+pykakasi==2.3.0
+cutlet==0.5.0
+fugashi[unidic]==1.4.0
