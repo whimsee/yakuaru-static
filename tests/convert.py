@@ -19,6 +19,7 @@ def generate_furigana(text):
         temp += item['hira']
     return temp
 
+
 hepburn = cutlet.Cutlet(use_foreign_spelling=False)
 kunrei = cutlet.Cutlet(system="kunrei",use_foreign_spelling=False)
 nihon = cutlet.Cutlet(system="nihon",use_foreign_spelling=False)
@@ -42,15 +43,18 @@ with open("glossaryRaw.json", "r", encoding="utf8") as file:
         test = generate_furigana(x['term'])
         trial = test == x['romakana']
 
-        x['romakana'] = generate_furigana(x['term'])
+        if "kanaOverride" in x.keys():
+            x['romakana'] = generate_furigana(x['kanaOverride'])
+        else:
+            x['romakana'] = generate_furigana(x['term'])
 
         term['hepburn'] = hepburn.romaji(x['romakana']).replace(" ","").lower();
         term['kunrei'] = kunrei.romaji(x['romakana']).replace(" ","").lower();
         term['nihon'] = nihon.romaji(x['romakana']).replace(" ","").lower();
-        if not trial:
-            print(temp)
-            print(x['term'], test, trial)
-            print(term['hepburn'], term['kunrei'], term['nihon'])
+        # if not trial:
+        #     print(temp)
+        #     print(x['term'], test, trial)
+        #     print(term['hepburn'], term['kunrei'], term['nihon'])
         
         if "altterm" in x.keys():
             for y in x['altterm']:
@@ -61,6 +65,8 @@ with open("glossaryRaw.json", "r", encoding="utf8") as file:
             term['altsearch'] += strip_punc_and_space(y['def'])
 
         if "kanaOverride" in x.keys():
+            print("OVERRIDE:", x['term'], x['kanaOverride'], temp, x['romakana'])
+            print(term['hepburn'], term['kunrei'], term['nihon'])
             term['furigana'] = x['kanaOverride']
             term['altsearch'] += wanakana.to_hiragana(x['kanaOverride']) + term['hepburn']
         else:

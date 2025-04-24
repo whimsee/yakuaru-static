@@ -34,10 +34,15 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/interface.js"></script>
 		<script src="js/breakpoints.min.js"></script>
+        <script src="js/kuroshiro-analyzer-kuromoji.min.js"></script>
 
 		<!--Initialization has to start after the converter/analyzer fully loads so that its functions won't throw a null reference error-->
 		
 		<script type="text/javascript">
+
+            const furishiro = new Kuroshiro();
+            furishiro.init(new KuromojiAnalyzer({ dictPath: "js/dict" }))
+            
             $(document).ready(function() {
                 initInterface("123", "2233")});
 
@@ -45,11 +50,9 @@
                 console.log("test");
                 let x = document.getElementById("term").value;
                 console.log(x);
-                if (x == "nothing") {
-                    alert("Name must be filled out");
-                    return false;
-                }
+
             }
+            
 		</script>
 		
 		<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -114,6 +117,19 @@
                                             <input type="text" name="term" id="term" 
                                                 placeholder="Enter your first name" required>
                                             <span id="live_update"></span>
+                                            <span id="live_update2"></span>
+                                            <script type="text/javascript">
+                                                const term = document.getElementById("term");
+
+                                                
+                                                term.addEventListener("input", (event) => {
+                                                    var text = "";
+                                                    document.getElementById("live_update").innerHTML = term.value;
+                                                    console.log(term.value);
+                                                    furishiro.convert(term.value, { to: "hiragana", mode: "normal" }).then(result => text = result);
+                                                    document.getElementById("live_update2").innerHTML = text
+                                                });
+                                            </script>
                                             <br><br>
                                             <label for="literal">literal</label>
                                             <section class="description">DESCRIPTION</section>
@@ -173,15 +189,4 @@
 
 			</div>
 	</body>
-    <script type="text/javascript">
-        const email = document.getElementById("term");
-        email.addEventListener("input", (event) => {
-            if (email.validity.typeMismatch) {
-                email.setCustomValidity("I am expecting an email address!");
-            } else {
-                email.setCustomValidity("");
-            }
-        });
-
-    </script>
 </html>

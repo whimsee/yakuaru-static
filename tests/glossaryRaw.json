@@ -41,7 +41,6 @@
   },
   {
     "term": "表と裏",
-    "kanaOverride": "おもてとうら",
     "romakana": "おもてとうら",
     "lit": "front and back",
     "tl": [
@@ -7862,7 +7861,6 @@
   {
     "term": "獣道",
     "romakana": "けものみち",
-    "kanaOverride": "けものみち",
     "lit": "animal trail",
     "tl": [
       {
