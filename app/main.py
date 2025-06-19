@@ -7,6 +7,7 @@ import re
 import string
 import requests
 from wanakana import is_katakana, to_hiragana
+from pydantic import BaseModel
 
 from typing import Annotated
 from fastapi import FastAPI, Request, HTTPException, Form
@@ -281,14 +282,24 @@ async def add(request: Request):
         request=request, name="add.html"
     )
 
-@app.get("/submit/", response_class=HTMLResponse)
+class FormData(BaseModel):
+    term: str
+    definition: str
+    cap_token: str
+
+@app.post("/submit/", response_class=HTMLResponse)
 # async def submit_term(term: Annotated[str, Form()], description: Annotated[str, Form()], cap-token: Annotated[str, Form()]):
-async def submit_term(term: Annotated[str, Form()], definition: Annotated[str, Form()]):
-    print(Form())
-    # return {"term": username, "description": description}
-    # return templates.TemplateResponse(
-    #     request=request, name="submit.html"
-    # )
+async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
+    print("POST")
+    print(submit.cap_token)
+    url = 'https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/siteverify'
+    myobj = {'secret': '26490bcf3b1f906bd1e51f89c47955f8f51e2a1a04a18529d2', 'response': submit.cap_token}
+    headers = {"Content-Type" : "application/json"}
+    x = requests.post(url, json=myobj, headers=headers)
+    print(x.text)
+    return templates.TemplateResponse(
+        request=request, name="submit.html"
+    )
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):

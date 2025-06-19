@@ -52,6 +52,14 @@
                 console.log(x);
                 }
 
+
+			function httpGet(theUrl)
+			{
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+				xmlHttp.send( null );
+				return xmlHttp.responseText;
+			}
 			// Token Handling
 			const cap = new Cap({
 				apiEndpoint: "https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/"
@@ -63,6 +71,7 @@
 					token = solution.token;
 				}
 
+				console.log(httpGet("/test"));
 				console.log(cap.token);
 				console.log(token);
 
@@ -141,7 +150,8 @@
                                         Source
                                         JP sample sentence
                                         EN translation of sample sentence
-                                        <form name="add_entry">
+<!--                                         <form name="add_entry"> -->
+                                        <form name="add_entry" action="/submit/" method="post">
                                             <label for="term">TERM</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="term" id="term"
@@ -197,9 +207,9 @@
                                                 placeholder="Enter your email address"">
                                             <br><br>
                                             <span id="progress"></span>
-                                            <input type="button" class="submit" value="Submit" onClick="validateSolve()">
-                                      <!--      <cap-widget id="cap" data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/"></cap-widget>-->
-
+<!--                                             <input type="button" class="submit" value="Submit" onClick="validateSolve()"> -->
+                                            <cap-widget id="cap" data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/" data-cap-hidden-field-name="cap_token"></cap-widget>
+											<input type="submit" class="submit">
                                         </form>
                                     </div>
 								</section>
