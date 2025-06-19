@@ -5,9 +5,11 @@ import random
 import json
 import re
 import string
+import requests
 from wanakana import is_katakana, to_hiragana
 
-from fastapi import FastAPI, Request, HTTPException
+from typing import Annotated
+from fastapi import FastAPI, Request, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
 import starlette.status as status
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -271,6 +273,22 @@ async def search(request: Request):
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
     )
+
+
+@app.get("/add", response_class=HTMLResponse)
+async def add(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="add.html"
+    )
+
+@app.get("/submit/", response_class=HTMLResponse)
+# async def submit_term(term: Annotated[str, Form()], description: Annotated[str, Form()], cap-token: Annotated[str, Form()]):
+async def submit_term(term: Annotated[str, Form()], definition: Annotated[str, Form()]):
+    print(Form())
+    # return {"term": username, "description": description}
+    # return templates.TemplateResponse(
+    #     request=request, name="submit.html"
+    # )
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):

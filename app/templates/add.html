@@ -20,7 +20,7 @@
 		<link rel="canonical" href="https://yakuaru.com" />
 
 		<link rel="stylesheet" href="css/main.css" />
-		
+
 		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
 
 		<!-- https://kuroshiro.org/ Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported. -->
@@ -37,26 +37,56 @@
         <script src="js/kuroshiro-analyzer-kuromoji.min.js"></script>
 
 		<!--Initialization has to start after the converter/analyzer fully loads so that its functions won't throw a null reference error-->
-		
+		<script src="https://cap.yamaguchi.duckdns.org/assets/widget.js"></script>
 		<script type="text/javascript">
 
             const furishiro = new Kuroshiro();
             furishiro.init(new KuromojiAnalyzer({ dictPath: "js/dict" }))
-            
+
             $(document).ready(function() {
                 initInterface("123", "2233")});
 
             function validateForm() {
                 console.log("test");
-                let x = document.getElementById("term").value;
+                let x = document.querySelector("#term").value;
                 console.log(x);
+                }
 
-            }
-            
+			// Token Handling
+			const cap = new Cap({
+				apiEndpoint: "https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/"
+			});
+			var token = null;
+			async function validateSolve() {
+				if (token == null) {
+					const solution = await cap.solve();
+					token = solution.token;
+				}
+
+				console.log(cap.token);
+				console.log(token);
+
+				let term = document.querySelector("#term").value;
+				let definition = document.querySelector("#definition").value;
+
+				console.log(term);
+				console.log(definition);
+
+
+
+			}
+			cap.addEventListener("progress", (event) => {
+			const cap_progress = document.querySelector("#progress");
+			console.log(`Solving... ${event.detail.progress}% done`);
+			cap_progress.innerHTML = `Solving... ${event.detail.progress}% done`;
+			});
+
+
+
 		</script>
-		
+
 		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GJ1HWB5VBW"></script>
+<!-- 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GJ1HWB5VBW"></script> -->
 		<script>
 		  window.dataLayer = window.dataLayer || [];
 		  function gtag(){dataLayer.push(arguments);}
@@ -111,64 +141,65 @@
                                         Source
                                         JP sample sentence
                                         EN translation of sample sentence
-                                        <form name="add_entry" action="#" method="post">
+                                        <form name="add_entry">
                                             <label for="term">TERM</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="term" id="term" 
+                                            <input type="text" name="term" id="term"
                                                 placeholder="Enter your first name" required>
                                             <span id="live_update"></span>
                                             <span id="live_update2"></span>
                                             <script type="text/javascript">
-                                                const term = document.getElementById("term");
+                                                const term = document.querySelector("#term");
 
-                                                
+
                                                 term.addEventListener("input", (event) => {
                                                     var text = "";
-                                                    document.getElementById("live_update").innerHTML = term.value;
+                                                    document.querySelector("#live_update").innerHTML = term.value;
                                                     console.log(term.value);
                                                     furishiro.convert(term.value, { to: "hiragana", mode: "normal" }).then(result => text = result);
-                                                    document.getElementById("live_update2").innerHTML = text
+                                                    document.querySelector("#live_update2").innerHTML = text
                                                 });
                                             </script>
                                             <br><br>
                                             <label for="literal">literal</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="literal" id="literal" 
+                                            <input type="text" name="literal" id="literal"
                                             placeholder="Enter your last name" >
                                             <br><br>
                                             <label for="definition">Definition</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="definition" id="definition" 
+                                            <input type="text" name="definition" id="definition"
                                                 placeholder="Enter a definition" required>
                                             <br><br>
                                             <label for="explanation">Contextual Explanation</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="explanation" id="explanation" 
+                                            <input type="text" name="explanation" id="explanation"
                                                 placeholder="Enter your first name" >
                                             <br><br>
                                             <label for="source">Source</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="source" id="source" 
+                                            <input type="text" name="source" id="source"
                                                 placeholder="Enter your first name" >
                                             <br><br>
                                             <label for="jpsam">JP sample sentence</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="jpsam" id="jpsam" 
+                                            <input type="text" name="jpsam" id="jpsam"
                                                 placeholder="Enter your first name" >
                                             <br><br>
                                             <label for="ensam">EN sample sentence</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="ensam" id="ensam" 
+                                            <input type="text" name="ensam" id="ensam"
                                                 placeholder="Enter your first name" >
                                             <br><br>
                                             <label for="contributor">Contributor</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="contributor" id="contributor" 
+                                            <input type="text" name="contributor" id="contributor"
                                                 placeholder="Enter your email address"">
                                             <br><br>
-                                            <input type="submit" class="submit" onClick="validateForm()">
-                                            <cap-widget data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/"></cap-widget>
-                                            <script src="https://cap.yamaguchi.duckdns.org/assets/widget.js"></script>
+                                            <span id="progress"></span>
+                                            <input type="button" class="submit" value="Submit" onClick="validateSolve()">
+                                      <!--      <cap-widget id="cap" data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/api/"></cap-widget>-->
+
                                         </form>
                                     </div>
 								</section>
