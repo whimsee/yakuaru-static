@@ -296,10 +296,14 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     myobj = {'secret': '26490bcf3b1f906bd1e51f89c47955f8f51e2a1a04a18529d2', 'response': submit.cap_token}
     headers = {"Content-Type" : "application/json"}
     x = requests.post(url, json=myobj, headers=headers)
-    print(x.text)
-    return templates.TemplateResponse(
-        request=request, name="submit.html"
-    )
+    # print(type(x.text))
+    cap_result = json.loads(x.text)
+    print(cap_result)
+    print(cap_result['success'])
+    # return templates.TemplateResponse(
+    #     request=request, name="submit.html"
+    # )
+    return {"message": "Hello World"}
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):
