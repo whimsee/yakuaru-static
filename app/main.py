@@ -291,19 +291,36 @@ class FormData(BaseModel):
 # async def submit_term(term: Annotated[str, Form()], description: Annotated[str, Form()], cap-token: Annotated[str, Form()]):
 async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     print("POST")
-    print(submit.cap_token)
-    url = 'https://cap.yamaguchi.duckdns.org/57a0c3bc6df0/siteverify'
-    myobj = {'secret': '26490bcf3b1f906bd1e51f89c47955f8f51e2a1a04a18529d2', 'response': submit.cap_token}
+    url = 'https://cap.yamaguchi.duckdns.org/' + secrets.secrets['CAP_API'] + '/siteverify'
+    myobj = {'secret': secrets.secrets['CAP_SECRET'], 'response': submit.cap_token}
     headers = {"Content-Type" : "application/json"}
     x = requests.post(url, json=myobj, headers=headers)
     # print(type(x.text))
     cap_result = json.loads(x.text)
     print(cap_result)
-    print(cap_result['success'])
-    # return templates.TemplateResponse(
-    #     request=request, name="submit.html"
-    # )
-    return {"message": "Hello World"}
+    
+    if "error" in cap_result:
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+        )
+    
+
+    try:
+        print(cap_result['success'])
+        if cap_result['success'] == True:
+            return templates.TemplateResponse(
+                request=request, name="submit.html"
+            )
+        else:
+            return templates.TemplateResponse(
+                request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+            ) 
+    except KeyError:
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+        ) 
+
+    # return {"message": "Hello World"}
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):
@@ -430,6 +447,8 @@ async def get_page(request: Request):
         return templates.TemplateResponse(
             request=request, name="resources.html", context={"resources" : resources}
         )
+
+
 
 @app.get("/resources.html", response_class=HTMLResponse)
 async def get_page(request: Request):

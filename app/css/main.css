@@ -339,6 +339,34 @@ input, select, textarea {
 	    padding-bottom: 10px;
 	}
 
+	#error {
+		margin: auto;
+	    max-width: 1200px;
+	    font-family: "Noto Serif JP";
+	}
+
+	#error p{
+		padding: 30px 100px 55px 100px;
+		text-align: center;
+	    font-weight: bold;
+	    font-family: "Noto Serif JP";
+		font-size: 1.2em;
+	}
+
+	#submit {
+		margin: auto;
+	    max-width: 1200px;
+	    font-family: "Noto Serif JP";
+	}
+
+	#submit p{
+		padding: 30px 100px 55px 100px;
+		text-align: center;
+	    font-weight: bold;
+	    font-family: "Noto Serif JP";
+		font-size: 1.2em;
+	}
+
 	#content.resources div{
 	  padding: 30px 100px 55px 100px;
 	  font-family: "Noto Serif JP";
