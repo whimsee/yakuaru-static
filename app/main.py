@@ -4,10 +4,13 @@ from datetime import datetime, time
 import random
 import json
 import re
-import string
 import requests
-from wanakana import is_katakana, to_hiragana
 from pydantic import BaseModel
+
+import cutlet
+import string
+import wanakana
+import pykakasi
 
 from typing import Annotated
 from fastapi import FastAPI, Request, HTTPException, Form
@@ -33,6 +36,19 @@ def strip_punc(text):
 
 def strip_punc_and_space(text):
     return ''.join(word.strip(string.punctuation) for word in text.split())
+
+def generate_furigana(text):
+    temp = ""
+    result = kks.convert(text)
+    for item in result:
+        temp += item['hira']
+    return temp
+
+cutlet_hepburn = cutlet.Cutlet(use_foreign_spelling=False)
+cutlet_kunrei = cutlet.Cutlet(system="kunrei",use_foreign_spelling=False)
+cutlet_nihon = cutlet.Cutlet(system="nihon",use_foreign_spelling=False)
+
+kks = pykakasi.kakasi()
 
 def letter_sub(letter):
     if letter == "~":
@@ -171,7 +187,7 @@ async def search(request: Request, term_id: str):
     if term_id == "":
         return RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     else:
-        search_term = term_id if not is_katakana(term_id) else to_hiragana(term_id)
+        search_term = term_id if not wanakana.is_katakana(term_id) else wanakana.to_hiragana(term_id)
 
     matches = []
     found = False
@@ -284,41 +300,116 @@ async def add(request: Request):
 
 class FormData(BaseModel):
     term: str
+    kana: str
+    literal: str
     definition: str
+    explanation: str
+    source: str
+    jpsam: str
+    ensam: str
+    contributor: str
     cap_token: str
 
 @app.post("/submit/", response_class=HTMLResponse)
-# async def submit_term(term: Annotated[str, Form()], description: Annotated[str, Form()], cap-token: Annotated[str, Form()]):
 async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
-    print("POST")
+    ADD_TERM = False
+    TERM_FOUND = False
+    DEF_FOUND = False
     url = 'https://cap.yamaguchi.duckdns.org/' + secrets.secrets['CAP_API'] + '/siteverify'
     myobj = {'secret': secrets.secrets['CAP_SECRET'], 'response': submit.cap_token}
     headers = {"Content-Type" : "application/json"}
     x = requests.post(url, json=myobj, headers=headers)
     # print(type(x.text))
     cap_result = json.loads(x.text)
+    print(submit)
     print(cap_result)
-    
+    # print(term, description)
+
     if "error" in cap_result:
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
         )
-    
+
 
     try:
-        print(cap_result['success'])
         if cap_result['success'] == True:
-            return templates.TemplateResponse(
-                request=request, name="submit.html"
-            )
+            ADD_TERM = True
         else:
             return templates.TemplateResponse(
                 request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-            ) 
+            )
     except KeyError:
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-        ) 
+        )
+
+    # try:
+    #     if cap_result['success'] == True:
+    #         return templates.TemplateResponse(
+    #             request=request, name="submit.html"
+    #         )
+    #     else:
+    #         return templates.TemplateResponse(
+    #             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+    #         )
+    # except KeyError:
+    #     return templates.TemplateResponse(
+    #         request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+    #     )
+
+    term = submit.term
+    kana = submit.kana
+    hepburn = cutlet_hepburn.romaji(kana).replace(" ","").lower();
+    kunrei = cutlet_kunrei.romaji(kana).replace(" ","").lower();
+    nihon = cutlet_nihon.romaji(kana).replace(" ","").lower();
+    for token in term:
+        if wanakana.is_kanji(token):
+            furigana = generate_furigana(term)
+            break
+        else:
+            furigana = None
+
+    altsearch = ""
+    lit = submit.literal
+    def_term = submit.definition
+    exp_term = submit.explanation
+    source_term = submit.source
+    jpsam_term = submit.jpsam
+    ensam_term = submit.ensam
+    contributor_term = submit.contributor
+    print(hepburn, kunrei, nihon)
+    print(furigana)
+
+    with Session(engine) as session:
+        statement = select(models.Terms).where(models.Terms.name == term)
+        try:
+            one_result = session.exec(statement).one()
+            TERM_FOUND = True
+            print("TERM FOUND")
+            print(one_result.id)
+        except NoResultFound:
+            print("No result")
+
+        if TERM_FOUND:
+            statement = select(models.TL).where(col(models.TL.definition).contains(def_term))
+            try:
+                one_result = session.exec(statement).one()
+                DEF_FOUND = True
+                print("DEF FOUND")
+                print(one_result.id)
+            except NoResultFound:
+                print("No result")
+
+    if TERM_FOUND and DEF_FOUND:
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "TERM and DEFINITION already exists"}
+        )
+    
+    if ADD_TERM:
+        return templates.TemplateResponse(
+                request=request, name="submit.html"
+            )
+
 
     # return {"message": "Hello World"}
 

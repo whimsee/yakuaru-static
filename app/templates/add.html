@@ -23,8 +23,6 @@
 
 		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
 
-		<!-- https://kuroshiro.org/ Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported. -->
-		<script src="js/kuroshiro.min.js"></script>
 
 		<!-- <script
 				src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -34,56 +32,49 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/interface.js"></script>
 		<script src="js/breakpoints.min.js"></script>
-        <script src="js/kuroshiro-analyzer-kuromoji.min.js"></script>
+
+        <script src="js/wanakana.min.js"></script>
 
 		<!--Initialization has to start after the converter/analyzer fully loads so that its functions won't throw a null reference error-->
 		<script src="https://cap.yamaguchi.duckdns.org/assets/widget.js"></script>
 		<script type="text/javascript">
 
-            const furishiro = new Kuroshiro();
-            furishiro.init(new KuromojiAnalyzer({ dictPath: "js/dict" }))
 
-            $(document).ready(function() {
-                initInterface("123", "2233")});
-
+			/*
             function validateForm() {
                 console.log("test");
                 let x = document.querySelector("#term").value;
                 console.log(x);
                 }
+			*/
 
-
-			function httpGet(theUrl)
-			{
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-				xmlHttp.send( null );
-				return xmlHttp.responseText;
-			}
 			// Token Handling
 			const cap = new Cap({
 				apiEndpoint: "https://cap.yamaguchi.duckdns.org/8460ca2fd5/api"
 			});
+
 			var token = null;
+
 			async function validateSolve() {
 				if (token == null) {
 					const solution = await cap.solve();
 					token = solution.token;
 				}
 
-				console.log(httpGet("/test"));
-				console.log(cap.token);
-				console.log(token);
+				// console.log(httpGet("/test"));
+				// console.log(cap.token);
+				// console.log(token);
 
 				let term = document.querySelector("#term").value;
+				let literal = document.querySelector("#literal").value;
 				let definition = document.querySelector("#definition").value;
 
-				console.log(term);
-				console.log(definition);
-
-
+				// console.log(term);
+				// console.log(definition);
+				// console.log.(literal);
 
 			}
+
 			cap.addEventListener("progress", (event) => {
 			const cap_progress = document.querySelector("#progress");
 			console.log(`Solving... ${event.detail.progress}% done`);
@@ -139,7 +130,7 @@
                                 <div class="description">VERY LONG DESCRIPTION</div>
 								<section id="glossary-wrapper" class="main">
                                     Sample entry. Info taken from Jisho. Submissions will be displayed like this.
-                                    <img src="sample.png" />
+                                    <img src="/images/sample.png" />
                                     <div class="fields">
                                         Items:
                                         Term
@@ -155,58 +146,82 @@
                                             <label for="term">TERM</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="term" id="term"
-                                                placeholder="Enter your first name" required>
-                                            <span id="live_update"></span>
-                                            <span id="live_update2"></span>
-                                            <script type="text/javascript">
-                                                const term = document.querySelector("#term");
+                                                placeholder="TERM" required>
+											<span id="term_checker"></span>
+											<script type="text/javascript">
+												term.addEventListener("input", (event) => {
+													if (wanakana.isKana(term.value)) {
+														document.querySelector("#term_checker").innerHTML =  "YES";
+													}
 
-
-                                                term.addEventListener("input", (event) => {
-                                                    var text = "";
-                                                    document.querySelector("#live_update").innerHTML = term.value;
-                                                    console.log(term.value);
-                                                    furishiro.convert(term.value, { to: "hiragana", mode: "normal" }).then(result => text = result);
-                                                    document.querySelector("#live_update2").innerHTML = text
                                                 });
-                                            </script>
+											</script>
                                             <br><br>
+                                            <label for="kana">kana</label>
+                                            <section class="description">DESCRIPTION</section>
+                                            <input type="text" name="kana" id="kana"
+                                            placeholder="kana" required>
+                                            <span id="kana_checker"></span>
+											<script type="text/javascript">
+												kana.addEventListener("input", (event) => {
+													if (wanakana.isKana(kana.value)) {
+														document.querySelector("#kana_checker").innerHTML =  "YES";
+													}
+
+                                                });
+											</script>
+
+                                            <br><br>
+
                                             <label for="literal">literal</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="literal" id="literal"
-                                            placeholder="Enter your last name" >
+                                            placeholder="LITERAL" >
+
                                             <br><br>
+
                                             <label for="definition">Definition</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="definition" id="definition"
-                                                placeholder="Enter a definition" required>
+                                                placeholder="DEFINITION" required>
+
                                             <br><br>
+
                                             <label for="explanation">Contextual Explanation</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="explanation" id="explanation"
-                                                placeholder="Enter your first name" >
+                                                placeholder="EXPLANATION" >
+
                                             <br><br>
+
                                             <label for="source">Source</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="source" id="source"
-                                                placeholder="Enter your first name" >
+                                                placeholder="SOURCE" >
+
                                             <br><br>
+
                                             <label for="jpsam">JP sample sentence</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="jpsam" id="jpsam"
-                                                placeholder="Enter your first name" >
+                                                placeholder="JP SAMPLE" >
+
                                             <br><br>
+
                                             <label for="ensam">EN sample sentence</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="ensam" id="ensam"
-                                                placeholder="Enter your first name" >
+                                                placeholder="EN SAMPLE" >
+
                                             <br><br>
+
                                             <label for="contributor">Contributor</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="contributor" id="contributor"
                                                 placeholder="Enter your email address"">
+
                                             <br><br>
-                                            <span id="progress"></span>
+
 <!--                                             <input type="button" class="submit" value="Submit" onClick="validateSolve()"> -->
                                             <cap-widget id="cap" data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/8460ca2fd5/" data-cap-hidden-field-name="cap_token"></cap-widget>
 											<input type="submit" class="submit">
