@@ -164,8 +164,11 @@
                                             <span id="kana_checker"></span>
 											<script type="text/javascript">
 												kana.addEventListener("input", (event) => {
-													if (wanakana.isKana(kana.value)) {
+													if (wanakana.isHiragana(kana.value)) {
 														document.querySelector("#kana_checker").innerHTML =  "YES";
+													}
+													else {
+														document.querySelector("#kana_checker").innerHTML =  "MUST BE IN HIRAGANA";
 													}
 
                                                 });

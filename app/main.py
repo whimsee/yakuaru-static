@@ -359,27 +359,32 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
 
     term = submit.term
     kana = submit.kana
+
+    if not wanakana.is_hiragana(kana):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "KANA field must be in hiragana"}
+        )
+
     hepburn = cutlet_hepburn.romaji(kana).replace(" ","").lower();
     kunrei = cutlet_kunrei.romaji(kana).replace(" ","").lower();
     nihon = cutlet_nihon.romaji(kana).replace(" ","").lower();
 
     for token in term:
         if wanakana.is_kanji(token):
-            furigana = generate_furigana(term)
+            furigana = kana
             break
         else:
             furigana = None
 
-
     lit = submit.literal
-    def_term = submit.definition
-    exp_term = submit.explanation
-    source_term = submit.source
-    jpsam_term = submit.jpsam
-    ensam_term = submit.ensam
-    contributor_term = submit.contributor
+    definition = submit.definition
+    explanation = submit.explanation
+    source = submit.source
+    jpsam = submit.jpsam
+    ensam = submit.ensam
+    contributor = submit.contributor
 
-    altsearch = strip_punc_and_space(def_term)
+    altsearch = strip_punc_and_space(definition) + (wanakana.to_hiragana(term) if wanakana.is_katakana(term) else kana) + hepburn
 
     print(hepburn, kunrei, nihon)
     print(furigana)
