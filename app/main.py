@@ -362,6 +362,7 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     hepburn = cutlet_hepburn.romaji(kana).replace(" ","").lower();
     kunrei = cutlet_kunrei.romaji(kana).replace(" ","").lower();
     nihon = cutlet_nihon.romaji(kana).replace(" ","").lower();
+
     for token in term:
         if wanakana.is_kanji(token):
             furigana = generate_furigana(term)
@@ -369,7 +370,7 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
         else:
             furigana = None
 
-    altsearch = ""
+
     lit = submit.literal
     def_term = submit.definition
     exp_term = submit.explanation
@@ -377,6 +378,9 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     jpsam_term = submit.jpsam
     ensam_term = submit.ensam
     contributor_term = submit.contributor
+
+    altsearch = strip_punc_and_space(def_term)
+
     print(hepburn, kunrei, nihon)
     print(furigana)
 
