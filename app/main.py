@@ -218,7 +218,6 @@ async def search(request: Request, term_id: str):
             results = session.exec(statement)
             temp_results = results.all()
             if len(temp_results) > 0:
-                print("FOUND")
                 found = True
 
         if not found:
@@ -232,7 +231,6 @@ async def search(request: Request, term_id: str):
             statement = select(models.Terms).where(col(models.Terms.hepburn).contains(search_term)).offset(0).limit(10)
             results = session.exec(statement)
             temp_results = results.all()
-            print(len(temp_results))
             if len(temp_results) > 0:
                 found = True
         
@@ -260,8 +258,6 @@ async def search(request: Request, term_id: str):
             results_as_dict |= {"tl" : terms_tl}
             matches.append(results_as_dict)
             matches.sort(key=lambda k: k['name'])
-            
-    # print(matches)
 
     return templates.TemplateResponse(
         request=request, name="search.html", context={"terms" : matches, "length" : length, "defcount" : defcount}
@@ -312,61 +308,64 @@ class FormData(BaseModel):
 
 @app.post("/submit/", response_class=HTMLResponse)
 async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
-    ADD_TERM = False
-    TERM_FOUND = False
-    DEF_FOUND = False
+
+
     url = 'https://cap.yamaguchi.duckdns.org/' + secrets.secrets['CAP_API'] + '/siteverify'
     myobj = {'secret': secrets.secrets['CAP_SECRET'], 'response': submit.cap_token}
     headers = {"Content-Type" : "application/json"}
     x = requests.post(url, json=myobj, headers=headers)
-    # print(type(x.text))
     cap_result = json.loads(x.text)
-    print(submit)
-    print(cap_result)
-    # print(term, description)
 
+
+    # Catch invalid captchas and parameters
     if "error" in cap_result:
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
         )
 
+    if submit.term == "" or submit.kana == "" or submit.definition == "":
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Please fill in all required fields."}
+        )
 
-    try:
+    if not wanakana.is_japanese(submit.term):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Submitted term must have some Japanese"}
+        )
+
+    if not wanakana.is_kana(submit.kana):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "KANA field must be in full hiragana or katakana"}
+        )
+
+    if wanakana.is_japanese(submit.literal):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any kana"}
+        )
+
+    if wanakana.is_japanese(submit.ensam):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "English sample sentence must be in English and should not contain any kana for clarity"}
+        )
+
+    if "success" in cap_result:
         if cap_result['success'] == True:
             ADD_TERM = True
         else:
             return templates.TemplateResponse(
                 request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
             )
-    except KeyError:
+    else:
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
         )
 
-    # try:
-    #     if cap_result['success'] == True:
-    #         return templates.TemplateResponse(
-    #             request=request, name="submit.html"
-    #         )
-    #     else:
-    #         return templates.TemplateResponse(
-    #             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-    #         )
-    # except KeyError:
-    #     return templates.TemplateResponse(
-    #         request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-    #     )
-
-    term = submit.term
-    kana = submit.kana
+    # Initialize terms
+    term = submit.term.strip()
+    kana = submit.kana.strip()
 
     if not wanakana.is_hiragana(kana):
-        if wanakana.is_katakana(kana):
-            kana = wanakana.to_hiragana(kana)
-        else:
-            return templates.TemplateResponse(
-                request=request, name="error.html", context={"error" : "KANA field must be in hiragana or katakana"}
-            )
+        kana = wanakana.to_hiragana(kana)
 
     hepburn = cutlet_hepburn.romaji(kana).replace(" ","").lower();
     kunrei = cutlet_kunrei.romaji(kana).replace(" ","").lower();
@@ -379,133 +378,112 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
         else:
             furigana = None
 
-    lit = submit.literal
-    definition = submit.definition
-    explanation = submit.explanation
-    source = submit.source
-    jpsam = submit.jpsam
-    ensam = submit.ensam
-    contributor = submit.contributor
+    temp_lit = submit.literal.strip()
+    definition = submit.definition.strip()
+    explanation = submit.explanation.strip()
 
     altsearch = strip_punc_and_space(definition) + (wanakana.to_hiragana(term) if wanakana.is_katakana(term) else kana) + hepburn
 
-    print(hepburn, kunrei, nihon)
-    print(furigana)
-    print(kana)
+    # Set values to None for submission
+    if explanation != "":
+        altsearch += strip_punc_and_space(explanation)
 
+    if submit.source == "":
+        source = None
+    else:
+        source = [submit.source.strip()]
+
+    if submit.jpsam == "":
+        jpsam = None
+    else:
+        jpsam = submit.jpsam.strip()
+
+    if submit.ensam == "":
+        ensam = None
+    else:
+        ensam = submit.ensam.strip()
+
+    if submit.contributor == "":
+        contributor = None
+    else:
+        contributor = submit.contributor.strip()
+
+    # Catch if term and definition exists
     with Session(engine) as session:
+        TL_TERMS = []
+        TERM_FOUND = False
+        DEF_FOUND = False
+
         statement = select(models.Terms).where(models.Terms.name == term)
+
         try:
-            one_result = session.exec(statement).one()
+            found_term = session.exec(statement).one()
             TERM_FOUND = True
-            print("TERM FOUND")
-            print(one_result.id)
+
+            TERM_ID = found_term.id
+            TERM_LIT = found_term.lit
+            TL_TERMS = found_term.tl
         except NoResultFound:
-            print("No result")
+            pass
 
         if TERM_FOUND:
             statement = select(models.TL).where(models.TL.definition == definition)
             try:
-                one_result = session.exec(statement).one()
+                result = session.exec(statement).one()
                 DEF_FOUND = True
-                print("DEF FOUND")
-                print(one_result.id)
             except NoResultFound:
-                print("No result")
+                pass
 
         if TERM_FOUND and DEF_FOUND:
             return templates.TemplateResponse(
                 request=request, name="error.html", context={"error" : "TERM and DEFINITION already exists"}
             )
-
-        if ADD_TERM:
+        elif DEF_FOUND:
             return templates.TemplateResponse(
-                    request=request, name="submit.html"
-                )
+                request=request, name="error.html", context={"error" : "DEFINITION already exists"}
+            )
 
-        # print(defs)
-        definition = get_tl(defs, "def")
-        defexp = get_tl(defs, "defexp")
-        source_temp = get_tl(defs, "src")
-        jpsam = get_tl(defs, "jpsam")
-        ensam = get_tl(defs, "ensam")
-        # credit_temp = get_tl(defs, "credit")
-        credit = get_tl(defs, "credit")
-
-        ### Create altsearch
-        altsearch += strip_punc_and_space(definition)
-
-        if defexp != None:
-            altsearch += strip_punc_and_space(defexp)
-
-        ### Prep source. convert list to string with separator
-        if source_temp != None:
-            if POSTGRES:
-                source = source_temp
-            elif POSTGRES == False and isinstance(source_temp, list):
-                source = "^*".join(str(x) for x in source_temp)
-            else:
-                source = source_temp
-        else:
-            source = None
-
-        ### Prep credit. convert list to string with separator
-        # if credit_temp != None:
-        #     if POSTGRES:
-        #         credit = credit_temp
-        #     elif POSTGRES == False and isinstance(credit_temp, list):
-        #         credit = "^*".join(str(x) for x in credit_temp)
-        #     else:
-        #         credit = credit_temp
-        # else:
-        #     credit = None
-
-
-        ### each img
-        # check if img exists and set parameters
-        img = get_tl(defs, "img")
-        if img != None:
-            img_format = img[0]
-            img_caption = img[1]
-            # try:
-            #     img_caption = img[1]
-            # except IndexError:
-            #     img_caption = None
-        else:
-            img_format = None
-            img_caption = None
-
-        tl_add = TL(
+        tl_add = models.TL(
                         definition=definition,
-                        defexp=defexp,
+                        defexp=explanation,
                         src=source,
-                        credit=credit,
+                        credit=contributor,
                         jpsam=jpsam,
                         ensam=ensam,
-                        image_format=img_format,
-                        image_caption=img_caption,
                     )
 
         TL_TERMS.append(tl_add)
 
-        term_add = Terms(
-                    name=term,
-                    altterm=altterm,
-                    romakana=romakana,
-                    lit=lit,
-                    hepburn=hepburn,
-                    kunrei=kunrei,
-                    nihon=nihon,
-                    furigana=furigana,
-                    kanaoverride=kanaoverride,
-                    altsearch=altsearch,
-                    tl=TL_TERMS
-                )
+        if TERM_FOUND:
+            if temp_lit != TERM_LIT:
+                lit = TERM_LIT + "; " + temp_lit
+            else:
+                lit = TERM_LIT
 
-        print("Adding:", term)
+            found_term.lit = lit
+            found_term.tl = TL_TERMS
+            term_add = found_term
+        else:
+            lit = temp_lit
+            term_add = models.Terms(
+                        name=term,
+                        romakana=kana,
+                        lit=lit,
+                        hepburn=hepburn,
+                        kunrei=kunrei,
+                        nihon=nihon,
+                        furigana=furigana,
+                        altsearch=altsearch,
+                        tl=TL_TERMS
+                    )
+
+        print("Adding: {} and {}".format(term, definition))
         session.add(term_add)
         session.commit()
-    # return {"message": "Hello World"}
+
+        return templates.TemplateResponse(
+                request=request, name="submit.html"
+            )
 
 @app.get("/numbers", response_class=HTMLResponse)
 async def search(request: Request):
@@ -516,7 +494,6 @@ async def search(request: Request):
 
     matches = []
     for number in search_string:
-        # print(letters)
         with Session(engine) as session:
             # Search LIKE
             statement = select(models.Terms).where(col(models.Terms.romakana).istartswith(number))
@@ -548,7 +525,6 @@ async def search(request: Request, letter: str):
     
     matches = []
     for letters in search_string:
-        # print(letters)
         with Session(engine) as session:
             # Search LIKE
             statement = select(models.Terms).where(col(models.Terms.romakana).istartswith(letters))
@@ -632,8 +608,6 @@ async def get_page(request: Request):
         return templates.TemplateResponse(
             request=request, name="resources.html", context={"resources" : resources}
         )
-
-
 
 @app.get("/resources.html", response_class=HTMLResponse)
 async def get_page(request: Request):

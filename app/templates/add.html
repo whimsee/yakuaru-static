@@ -153,7 +153,9 @@
 													if (wanakana.isKana(term.value)) {
 														document.querySelector("#term_checker").innerHTML =  "YES";
 													}
-
+													else {
+														document.querySelector("#term_checker").innerHTML =  "";
+													}
                                                 });
 											</script>
                                             <br><br>
@@ -165,12 +167,11 @@
 											<script type="text/javascript">
 												kana.addEventListener("input", (event) => {
 													if (wanakana.isKana(kana.value)) {
-														document.querySelector("#kana_checker").innerHTML =  "YES";
+														document.querySelector("#kana_checker").innerHTML =  "";
 													}
 													else {
-														document.querySelector("#kana_checker").innerHTML =  "MUST BE IN HIRAGANA";
+														document.querySelector("#kana_checker").innerHTML =  "MUST BE IN FULL HIRAGANA OR KATAKANA";
 													}
-
                                                 });
 											</script>
 
@@ -180,6 +181,17 @@
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="literal" id="literal"
                                             placeholder="LITERAL" >
+                                            <span id="lit_checker"></span>
+											<script type="text/javascript">
+												literal.addEventListener("input", (event) => {
+													if (wanakana.isJapanese(literal.value)) {
+														document.querySelector("#lit_checker").innerHTML =  "MUST BE IN ENGLISH";
+													}
+													else {
+														document.querySelector("#lit_checker").innerHTML =  "";
+													}
+                                                });
+											</script>
 
                                             <br><br>
 
@@ -215,6 +227,17 @@
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="ensam" id="ensam"
                                                 placeholder="EN SAMPLE" >
+											<span id="ensam_checker"></span>
+											<script type="text/javascript">
+												ensam.addEventListener("input", (event) => {
+													if (wanakana.isJapanese(ensam.value)) {
+														document.querySelector("#ensam_checker").innerHTML =  "MUST BE IN ENGLISH";
+													}
+													else {
+														document.querySelector("#ensam_checker").innerHTML =  "";
+													}
+                                                });
+											</script>
 
                                             <br><br>
 
