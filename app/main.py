@@ -361,9 +361,12 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     kana = submit.kana
 
     if not wanakana.is_hiragana(kana):
-        return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "KANA field must be in hiragana"}
-        )
+        if wanakana.is_katakana(kana):
+            kana = wanakana.to_hiragana(kana)
+        else:
+            return templates.TemplateResponse(
+                request=request, name="error.html", context={"error" : "KANA field must be in hiragana or katakana"}
+            )
 
     hepburn = cutlet_hepburn.romaji(kana).replace(" ","").lower();
     kunrei = cutlet_kunrei.romaji(kana).replace(" ","").lower();
@@ -388,6 +391,7 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
 
     print(hepburn, kunrei, nihon)
     print(furigana)
+    print(kana)
 
     with Session(engine) as session:
         statement = select(models.Terms).where(models.Terms.name == term)
@@ -400,7 +404,7 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
             print("No result")
 
         if TERM_FOUND:
-            statement = select(models.TL).where(col(models.TL.definition).contains(def_term))
+            statement = select(models.TL).where(models.TL.definition == definition)
             try:
                 one_result = session.exec(statement).one()
                 DEF_FOUND = True
@@ -409,17 +413,98 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
             except NoResultFound:
                 print("No result")
 
-    if TERM_FOUND and DEF_FOUND:
-        return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "TERM and DEFINITION already exists"}
-        )
-    
-    if ADD_TERM:
-        return templates.TemplateResponse(
-                request=request, name="submit.html"
+        if TERM_FOUND and DEF_FOUND:
+            return templates.TemplateResponse(
+                request=request, name="error.html", context={"error" : "TERM and DEFINITION already exists"}
             )
 
+        if ADD_TERM:
+            return templates.TemplateResponse(
+                    request=request, name="submit.html"
+                )
 
+        # print(defs)
+        definition = get_tl(defs, "def")
+        defexp = get_tl(defs, "defexp")
+        source_temp = get_tl(defs, "src")
+        jpsam = get_tl(defs, "jpsam")
+        ensam = get_tl(defs, "ensam")
+        # credit_temp = get_tl(defs, "credit")
+        credit = get_tl(defs, "credit")
+
+        ### Create altsearch
+        altsearch += strip_punc_and_space(definition)
+
+        if defexp != None:
+            altsearch += strip_punc_and_space(defexp)
+
+        ### Prep source. convert list to string with separator
+        if source_temp != None:
+            if POSTGRES:
+                source = source_temp
+            elif POSTGRES == False and isinstance(source_temp, list):
+                source = "^*".join(str(x) for x in source_temp)
+            else:
+                source = source_temp
+        else:
+            source = None
+
+        ### Prep credit. convert list to string with separator
+        # if credit_temp != None:
+        #     if POSTGRES:
+        #         credit = credit_temp
+        #     elif POSTGRES == False and isinstance(credit_temp, list):
+        #         credit = "^*".join(str(x) for x in credit_temp)
+        #     else:
+        #         credit = credit_temp
+        # else:
+        #     credit = None
+
+
+        ### each img
+        # check if img exists and set parameters
+        img = get_tl(defs, "img")
+        if img != None:
+            img_format = img[0]
+            img_caption = img[1]
+            # try:
+            #     img_caption = img[1]
+            # except IndexError:
+            #     img_caption = None
+        else:
+            img_format = None
+            img_caption = None
+
+        tl_add = TL(
+                        definition=definition,
+                        defexp=defexp,
+                        src=source,
+                        credit=credit,
+                        jpsam=jpsam,
+                        ensam=ensam,
+                        image_format=img_format,
+                        image_caption=img_caption,
+                    )
+
+        TL_TERMS.append(tl_add)
+
+        term_add = Terms(
+                    name=term,
+                    altterm=altterm,
+                    romakana=romakana,
+                    lit=lit,
+                    hepburn=hepburn,
+                    kunrei=kunrei,
+                    nihon=nihon,
+                    furigana=furigana,
+                    kanaoverride=kanaoverride,
+                    altsearch=altsearch,
+                    tl=TL_TERMS
+                )
+
+        print("Adding:", term)
+        session.add(term_add)
+        session.commit()
     # return {"message": "Hello World"}
 
 @app.get("/numbers", response_class=HTMLResponse)
