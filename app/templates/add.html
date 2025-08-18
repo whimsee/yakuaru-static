@@ -127,19 +127,17 @@
 					<div id="main">
 							<section id="glossary-wrapper" class="main">
 								<div class="add_header">ADD A TERM</div>
-                                <p class="add_description">VERY LONG DESCRIPTION. Sample entry. Info taken from Jisho. Submissions will be displayed like this.</p>
+                                <p class="add_description">VERY LONG DESCRIPTION. Sample entry. Info taken from Jisho. Submissions will be displayed like this.
+                                </p>
                                 <img src="/images/sample.png" />
 								<section id="glossary-wrapper" class="main">
-
-
                                     <div class="fields">
 <!--                                         <form name="add_entry"> -->
                                         <form name="add_entry" action="/submit/" method="post">
                                             <label for="term">TERM</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="term" id="term"
-                                                placeholder="TERM" required>
-											<span id="term_checker"></span>
+                                            <input type="text" name="term" id="term" required>
+											<span id="term_checker" class="checker"></span>
 											<script type="text/javascript">
 												term.addEventListener("input", (event) => {
 													if (wanakana.isKana(term.value)) {
@@ -151,11 +149,10 @@
                                                 });
 											</script>
                                             <br><br>
-                                            <label for="kana">kana</label>
+                                            <label for="kana">KANA</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="kana" id="kana"
-                                            placeholder="kana" required>
-                                            <span id="kana_checker"></span>
+                                            <input type="text" name="kana" id="kana" required>
+                                            <span id="kana_checker" class="checker"></span>
 											<script type="text/javascript">
 												kana.addEventListener("input", (event) => {
 													if (wanakana.isKana(kana.value)) {
@@ -169,11 +166,10 @@
 
                                             <br><br>
 
-                                            <label for="literal">literal</label>
+                                            <label for="literal">LITERAL</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="literal" id="literal"
-                                            placeholder="LITERAL" >
-                                            <span id="lit_checker"></span>
+                                            <input type="text" name="literal" id="literal" >
+                                            <span id="lit_checker" class="checker"></span>
 											<script type="text/javascript">
 												literal.addEventListener("input", (event) => {
 													if (wanakana.isJapanese(literal.value)) {
@@ -187,39 +183,34 @@
 
                                             <br><br>
 
-                                            <label for="definition">Definition</label>
+                                            <label for="definition">DEFINITION</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="definition" id="definition"
-                                                placeholder="DEFINITION" required>
+                                            <input type="text" name="definition" id="definition" required>
 
                                             <br><br>
 
-                                            <label for="explanation">Contextual Explanation</label>
-                                            <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="explanation" id="explanation"
-                                                placeholder="EXPLANATION" >
+                                            <label for="explanation">EXPLANATION</label>
+                                            <section class="description">Contextual Explanation</section>
+                                            <input type="text" name="explanation" id="explanation" >
 
                                             <br><br>
 
-                                            <label for="source">Source</label>
+                                            <label for="source">SOURCE</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="source" id="source"
-                                                placeholder="SOURCE" >
+                                            <input type="text" name="source" id="source" >
 
                                             <br><br>
 
-                                            <label for="jpsam">JP sample sentence</label>
+                                            <label for="jpsam">JP SAMPLE SENTENCE</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="jpsam" id="jpsam"
-                                                placeholder="JP SAMPLE" >
+                                            <input type="text" name="jpsam" id="jpsam" >
 
                                             <br><br>
 
-                                            <label for="ensam">EN sample sentence</label>
+                                            <label for="ensam">EN SAMPLE SENTENCE</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="ensam" id="ensam"
-                                                placeholder="EN SAMPLE" >
-											<span id="ensam_checker"></span>
+                                            <input type="text" name="ensam" id="ensam" >
+											<span id="ensam_checker" class="checker"></span>
 											<script type="text/javascript">
 												ensam.addEventListener("input", (event) => {
 													if (wanakana.isJapanese(ensam.value)) {
@@ -233,15 +224,15 @@
 
                                             <br><br>
 
-                                            <label for="contributor">Contributor</label>
+                                            <label for="contributor">CONTRIBUTOR</label>
                                             <section class="description">DESCRIPTION</section>
-                                            <input type="text" name="contributor" id="contributor"
-                                                placeholder="Enter your email address"">
+                                            <input type="text" name="contributor" id="contributor">
 
                                             <br><br>
 
 <!--                                             <input type="button" class="submit" value="Submit" onClick="validateSolve()"> -->
                                             <cap-widget id="cap" data-cap-api-endpoint="https://cap.yamaguchi.duckdns.org/8460ca2fd5/" data-cap-hidden-field-name="cap_token"></cap-widget>
+                                            <br>
 											<input type="submit" class="submit">
                                         </form>
                                     </div>

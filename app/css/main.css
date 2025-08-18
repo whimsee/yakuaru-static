@@ -3269,23 +3269,39 @@ input, select, textarea {
 		text-align: center;
 	}
 
-	section .description {
-		font-size: 1.2em;
-		padding: 20 20 0 0;
+
+	div .fields {
+		padding-top: 50px;
 	}
 
 	div .add_header {
 		text-align: center;
-		font-size: 1.2em;
+		font-size: 1.1em;
 	}
 
 	p .add_description {
 		font-size: 1em;
+		padding-bottom: 10px;
 	}
 
 	.fields label {
 		text-align: center;
-		font-size: 1.2em;
+		font-size: 1em;
+		font-weight: bold;
+	}
+
+	span.checker {
+		color: red;
+		font-size: .8em;
+	}
+
+	section .description {
+		font-size: .9em;
+		padding-bottom: 20px;
+	}
+
+	cap-widget {
+		padding-bottom: 50px;
 	}
 
 	header.major {
