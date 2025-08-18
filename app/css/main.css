@@ -3269,6 +3269,25 @@ input, select, textarea {
 		text-align: center;
 	}
 
+	section .description {
+		font-size: 1.2em;
+		padding: 20 20 0 0;
+	}
+
+	div .add_header {
+		text-align: center;
+		font-size: 1.2em;
+	}
+
+	p .add_description {
+		font-size: 1em;
+	}
+
+	.fields label {
+		text-align: center;
+		font-size: 1.2em;
+	}
+
 	header.major {
 		margin-bottom: 3em;
 	}
