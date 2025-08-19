@@ -1,7 +1,21 @@
 services:
   yakuaru-static:
-     container_name: yakuaru-testing
-     image: yakuaru-testing
-     ports:
-       - 8060:8060
-     restart: unless-stopped
+    build:
+      context: .
+    container_name: yakuaru-sqlmodel
+    image: yakuaru-sqlmodel
+    ports:
+      - 8060:8060
+    restart: unless-stopped
+
+  cap:
+    image: tiago2/cap:latest
+    container_name: cap-standalone
+    ports:
+      - 3000:3000
+    volumes:
+      - ./cap/cap-data:/usr/src/app/.data
+    environment:
+      # at least 30 characters long
+      - ADMIN_KEY=
+    restart: unless-stopped
