@@ -19,7 +19,7 @@
     },
     "Tools and offline dictionaries" : {
         "Yomitan" : "https://github.com/themoeway/yomitan",
-        "Yomitan Dictionaries" : "https://github.com/themoeway/yomitan/blob/master/docs/dictionaries.md#dictionaries",
+        "Yomitan Dictionaries" : "https://yomitan.wiki/dictionaries/",
         "http://qolibri.osdn.jp/ - browse and search EPWING format dictionaries (can be found online)" : "http://qolibri.osdn.jp/",
         "http://jedict.com/ - iOS app" : "http://jedict.com/",
         "https://www.tagaini.net/ - Offline J-E dictionary with other features that don't usually come with such programs" : "https://www.tagaini.net/",
@@ -33,7 +33,8 @@
         "Japanese SFX Google sheet" : "http://thejadednetwork.com/sfx/",
         "Hentai and Non-Hentai Sound Effects and What They Mean (PDF)" : "http://thejadednetwork.com/sfx/",
         "https://www.japanpowered.com/anime-articles/manga-sound-effect-guide" : "http://thejadednetwork.com/sfx/",
-        "http://mangastudies.com/sfx/index.php" : "http://mangastudies.com/sfx/index.php"
+        "http://mangastudies.com/sfx/index.php" : "http://mangastudies.com/sfx/index.php",
+        "J-Ono Search: An open-source, searchable collection of translated Japanese sound effects, onomatopoeia and mimetic sound words from manga." : "https://j-ono.com/"
     },
     "Name kanji reading and katakana names" : {
         "https://www.kanshudo.com/searchn - E-J name kanji lookup" : "https://www.kanshudo.com/searchn",
