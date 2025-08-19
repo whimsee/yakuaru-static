@@ -3277,6 +3277,7 @@ input, select, textarea {
 	div .add_header {
 		text-align: center;
 		font-size: 1.1em;
+		font-weight: bold;
 	}
 
 	p.add_description {
