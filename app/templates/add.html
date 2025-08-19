@@ -127,15 +127,22 @@
 					<div id="main">
 							<section id="glossary-wrapper" class="main">
 								<div class="add_header">ADD A TERM</div>
-                                <p class="add_description">VERY LONG DESCRIPTION. Sample entry. Info taken from Jisho. Submissions will be displayed like this.
+								<br>
+                                <p class="add_description">
+                                Welcome! Feel free to include any term or definition to the glossary. TERM, KANA, and DEFINITION are required fields. JavaScript must be enabled for mandatory validation. Please note the field restrictions; invalid submissions are automatically rejected.
+                                <br>
+                                </p>
+                                <p class="add_description">Contact me on <a href="https://x.com/jbtenmatay" target="_blank">Twitter</a>, <a href="https://bsky.app/profile/whimsee.bsky.social" target="_blank">Bluesky</a>, or Discord (whimsee#0759) if you need assistance.
+                                <br>
+                                Sample entry. Info taken from Jisho. Submissions will be displayed with fields as below.
                                 </p>
                                 <img src="/images/sample.png" />
 								<section id="glossary-wrapper" class="main">
                                     <div class="fields">
 <!--                                         <form name="add_entry"> -->
                                         <form name="add_entry" action="/submit/" method="post" accept-charset="utf-8">
-                                            <label for="term">TERM</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <label for="term">** TERM **</label>
+                                            <section class="description">Main Japanese term in hiragana, katakana, or kanji. Can be mixed with English characters.</section>
                                             <input type="text" name="term" id="term" required>
 											<span id="term_checker" class="checker"></span>
 											<script type="text/javascript">
@@ -144,13 +151,13 @@
 														document.querySelector("#term_checker").innerHTML =  "";
 													}
 													else {
-														document.querySelector("#term_checker").innerHTML =  "Mixed EN and JP is okay, as long as it has some JP";
+														document.querySelector("#term_checker").innerHTML =  "Mixed EN and JP is okay, as long as it has JP characters";
 													}
                                                 });
 											</script>
                                             <br><br>
-                                            <label for="kana">KANA</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <label for="kana">** KANA **</label>
+                                            <section class="description">Kana version of TERM, used as the main index term for searching. Hiragana preferable, but katakana is acceptable if necessary. If TERM contains kanji, this will be displayed inside [] next to the term. Also used for the romaji displayed below the term.</section>
                                             <input type="text" name="kana" id="kana" required>
                                             <span id="kana_checker" class="checker"></span>
 											<script type="text/javascript">
@@ -166,8 +173,8 @@
 
                                             <br><br>
 
-                                            <label for="literal">LITERAL</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <label for="literal">LITERAL or COMMON MEANING</label>
+                                            <section class="description">English only. Enter literal or commonly misunderstood or false friend interpretations here.</section>
                                             <input type="text" name="literal" id="literal" >
                                             <span id="lit_checker" class="checker"></span>
 											<script type="text/javascript">
@@ -183,8 +190,8 @@
 
                                             <br><br>
 
-                                            <label for="definition">DEFINITION</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <label for="definition">** DEFINITION **</label>
+                                            <section class="description">English only. Enter proper meaning/s here.</section>
                                             <input type="text" name="definition" id="definition" required>
                                             <span id="def_checker" class="checker"></span>
 											<script type="text/javascript">
@@ -201,25 +208,25 @@
                                             <br><br>
 
                                             <label for="explanation">EXPLANATION</label>
-                                            <section class="description">Contextual Explanation</section>
-                                            <input type="text" name="explanation" id="explanation" >
+                                            <section class="description">Contextual explanation for DEFINITION. Provide details for clarity. 1000 character limit. Single paragraph only. </section>
+                                            <input type="text" name="explanation" id="explanation"  maxlength="1000" >
 
                                             <br><br>
 
                                             <label for="source">SOURCE</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <section class="description">Provide attribution if possible. Could be a show, game, book, person, link, etc.</section>
                                             <input type="text" name="source" id="source" >
 
                                             <br><br>
 
                                             <label for="jpsam">JP SAMPLE SENTENCE</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <section class="description">Used to establish context. If provided, an EN translation must be provided in the next field.</section>
                                             <input type="text" name="jpsam" id="jpsam" >
 
                                             <br><br>
 
                                             <label for="ensam">EN SAMPLE SENTENCE</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <section class="description">Further clarifies how the TERM is used. Can be provided without a JP SAMPLE SENTENCE.</section>
                                             <input type="text" name="ensam" id="ensam" >
 											<span id="ensam_checker" class="checker"></span>
 											<script type="text/javascript">
@@ -236,7 +243,7 @@
                                             <br><br>
 
                                             <label for="contributor">CONTRIBUTOR</label>
-                                            <section class="description">DESCRIPTION</section>
+                                            <section class="description">Personal attribution, if you wish to be credited.</section>
                                             <input type="text" name="contributor" id="contributor">
 
                                             <br><br>

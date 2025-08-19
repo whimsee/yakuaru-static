@@ -3279,9 +3279,10 @@ input, select, textarea {
 		font-size: 1.1em;
 	}
 
-	p .add_description {
+	p.add_description {
 		font-size: 1em;
 		padding-bottom: 10px;
+		text-align: center;
 	}
 
 	.fields label {

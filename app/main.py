@@ -191,6 +191,7 @@ async def search(request: Request, term_id: str):
 
     matches = []
     found = False
+    print("Searching:", search_term)
     with Session(engine) as session:
         # Search LIKE
         statement = select(models.Terms).where(col(models.Terms.name).contains(search_term)).offset(0).limit(10)
@@ -337,6 +338,12 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     if submit.term == "" or submit.kana == "" or submit.definition == "":
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Please fill in all required fields."}
+        )
+
+    if submit.jpsam != "":
+        if submit.ensam == "":
+            return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Please provide an EN translation for the JP sample sentence."}
         )
 
     if not wanakana.is_japanese(submit.term):
