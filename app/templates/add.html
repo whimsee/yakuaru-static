@@ -133,18 +133,18 @@
 								<section id="glossary-wrapper" class="main">
                                     <div class="fields">
 <!--                                         <form name="add_entry"> -->
-                                        <form name="add_entry" action="/submit/" method="post">
+                                        <form name="add_entry" action="/submit/" method="post" accept-charset="utf-8">
                                             <label for="term">TERM</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="term" id="term" required>
 											<span id="term_checker" class="checker"></span>
 											<script type="text/javascript">
 												term.addEventListener("input", (event) => {
-													if (wanakana.isKana(term.value)) {
-														document.querySelector("#term_checker").innerHTML =  "YES";
+													if (wanakana.isJapanese(term.value)) {
+														document.querySelector("#term_checker").innerHTML =  "";
 													}
 													else {
-														document.querySelector("#term_checker").innerHTML =  "";
+														document.querySelector("#term_checker").innerHTML =  "Mixed EN and JP is okay, as long as it has some JP";
 													}
                                                 });
 											</script>
@@ -186,6 +186,17 @@
                                             <label for="definition">DEFINITION</label>
                                             <section class="description">DESCRIPTION</section>
                                             <input type="text" name="definition" id="definition" required>
+                                            <span id="def_checker" class="checker"></span>
+											<script type="text/javascript">
+												definition.addEventListener("input", (event) => {
+													if (wanakana.isJapanese(definition.value)) {
+														document.querySelector("#def_checker").innerHTML =  "MUST BE IN ENGLISH";
+													}
+													else {
+														document.querySelector("#def_checker").innerHTML =  "";
+													}
+                                                });
+											</script>
 
                                             <br><br>
 

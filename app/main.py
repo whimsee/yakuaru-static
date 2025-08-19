@@ -316,7 +316,6 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     x = requests.post(url, json=myobj, headers=headers)
     cap_result = json.loads(x.text)
 
-
     # Catch invalid captchas and parameters
     if "error" in cap_result:
         return templates.TemplateResponse(
@@ -340,12 +339,17 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
 
     if wanakana.is_japanese(submit.literal):
         return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any kana"}
+            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any Japanese characters"}
+        )
+
+    if wanakana.is_japanese(submit.definition):
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any Japanese characters"}
         )
 
     if wanakana.is_japanese(submit.ensam):
         return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "English sample sentence must be in English and should not contain any kana for clarity"}
+            request=request, name="error.html", context={"error" : "English sample sentence must be in English and should not contain any Japanese characters for clarity"}
         )
 
     if "success" in cap_result:
