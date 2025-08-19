@@ -317,6 +317,18 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
     cap_result = json.loads(x.text)
 
     # Catch invalid captchas and parameters
+    if "success" in cap_result:
+        if cap_result['success'] == True:
+            pass
+        else:
+            return templates.TemplateResponse(
+                request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+            )
+    else:
+        return templates.TemplateResponse(
+            request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
+        )
+
     if "error" in cap_result:
         return templates.TemplateResponse(
             request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
@@ -339,30 +351,19 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
 
     if wanakana.is_japanese(submit.literal):
         return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any Japanese characters"}
+            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain Japanese characters"}
         )
 
     if wanakana.is_japanese(submit.definition):
         return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "LIT must be in English and should not contain any Japanese characters"}
+            request=request, name="error.html", context={"error" : "DEFINITION must be in English and should not contain Japanese characters"}
         )
 
     if wanakana.is_japanese(submit.ensam):
         return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "English sample sentence must be in English and should not contain any Japanese characters for clarity"}
+            request=request, name="error.html", context={"error" : "English sample sentence must be in English and should not contain Japanese characters for clarity"}
         )
 
-    if "success" in cap_result:
-        if cap_result['success'] == True:
-            ADD_TERM = True
-        else:
-            return templates.TemplateResponse(
-                request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-            )
-    else:
-        return templates.TemplateResponse(
-            request=request, name="error.html", context={"error" : "Invalid Captcha. Try submitting again."}
-        )
 
     # Initialize terms
     term = submit.term.strip()
@@ -482,8 +483,13 @@ async def submit_term(request: Request, submit: Annotated[FormData, Form()]):
                     )
 
         print("Adding: {} and {}".format(term, definition))
-        session.add(term_add)
-        session.commit()
+        try:
+            session.add(term_add)
+            session.commit()
+        except Exception as e:
+            return templates.TemplateResponse(
+                request=request, name="error.html", context={"error" : "An error occurred. Try again."}
+            )
 
         return templates.TemplateResponse(
                 request=request, name="submit.html"
